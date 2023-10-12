@@ -1,6 +1,5 @@
 package com.example.freeqrgenerator
 
-import android.content.res.Resources
 import android.graphics.ImageDecoder
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -95,12 +94,6 @@ fun QrLayout(state: MainState) {
                         modifier = Modifier.weight(5f),
                         verticalArrangement = Arrangement.spacedBy(16.dp),
                     ) {
-                        ChooseForeground(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(5f),
-                            state
-                        )
                         UploadImage(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -112,12 +105,6 @@ fun QrLayout(state: MainState) {
                         modifier = Modifier.weight(5f),
                         verticalArrangement = Arrangement.spacedBy(16.dp),
                     ) {
-                        ChooseBackground(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(5f),
-                            state
-                        )
                         GenerateQrButton(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -179,12 +166,11 @@ fun UrlInput(state: MainState) {
 
 @Composable
 fun GenerateQrButton(modifier: Modifier, state: MainState) {
-    val resources = LocalContext.current.resources
     Button(
         shape = RoundedCornerShape(10),
         onClick = {
           if (state.url.isNotEmpty()) {
-              state.qrGenerated = processQr(state.url, resources)
+              state.qrGenerated = processQr(state.url)
           }
         },
         modifier = modifier
@@ -195,7 +181,7 @@ fun GenerateQrButton(modifier: Modifier, state: MainState) {
     }
 }
 
-fun processQr(url: String, resources: Resources): Drawable {
+fun processQr(url: String): Drawable {
     val options = QrVectorOptions.Builder()
 
     return QrCodeDrawable(QrData.Url(url), options.build())
@@ -228,42 +214,6 @@ fun UploadImage(modifier: Modifier, state: MainState) {
                 .createSource(LocalContext.current.contentResolver,it)
             state.bitmap = ImageDecoder.decodeBitmap(source)
         }
-    }
-}
-
-@Composable
-fun ChooseForeground(modifier: Modifier, state: MainState) {
-    val resources = LocalContext.current.resources
-    Button(
-        shape = RoundedCornerShape(10),
-        onClick = {
-            if (state.url.isNotEmpty()) {
-                state.qrGenerated = processQr(state.url, resources)
-            }
-        },
-        modifier = modifier
-    ) {
-        Text(
-            text = "Main color",
-        )
-    }
-}
-
-@Composable
-fun ChooseBackground(modifier: Modifier, state: MainState) {
-    val resources = LocalContext.current.resources
-    Button(
-        shape = RoundedCornerShape(10),
-        onClick = {
-            if (state.url.isNotEmpty()) {
-                state.qrGenerated = processQr(state.url, resources)
-            }
-        },
-        modifier = modifier
-    ) {
-        Text(
-            text = "Background",
-        )
     }
 }
 
