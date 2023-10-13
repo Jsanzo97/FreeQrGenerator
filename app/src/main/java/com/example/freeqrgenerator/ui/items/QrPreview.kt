@@ -49,7 +49,7 @@ fun QrPreview(state: MainState) {
                     .width(96.dp)
                     .height(96.dp)
                     .clip(CircleShape)
-                    .background(Color.White)
+                    .background(Color.Transparent)
                     .wrapContentHeight(),
             )
         }

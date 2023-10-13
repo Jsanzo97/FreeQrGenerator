@@ -1,11 +1,5 @@
 package com.example.freeqrgenerator.ui.items
 
-import android.graphics.ImageDecoder
-import android.net.Uri
-import android.os.Build
-import android.provider.MediaStore
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,12 +9,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.freeqrgenerator.MainState
 
 @Composable
 fun QrLayout(state: MainState) {
+    CustomColorPickerButton(
+        state = state
+    )
     Column {
         Row(
             horizontalArrangement = Arrangement.Center,
@@ -55,31 +51,22 @@ fun QrLayout(state: MainState) {
                         modifier = Modifier.weight(5f),
                         verticalArrangement = Arrangement.spacedBy(16.dp),
                     ) {
-                        val launcher = rememberLauncherForActivityResult(contract =
-                        ActivityResultContracts.GetContent()) { uri: Uri? ->
-                            state.imageUri = uri
-                        }
-
                         CustomButton(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .weight(5f),
-                            text = "Choose Image"
-                        ) {
-                            launcher.launch("image/*")
+                            text = "Main color")
+                        {
+                            state.showColorPicker = true
+                            state.selectorMode = ColorSelector.FOREGROUND
                         }
-
-                        state.imageUri?.let {
-                            if (Build.VERSION.SDK_INT < 28) {
-                                state.bitmap = MediaStore.Images
-                                    .Media.getBitmap(LocalContext.current.contentResolver,it)
-
-                            } else {
-                                val source = ImageDecoder
-                                    .createSource(LocalContext.current.contentResolver,it)
-                                state.bitmap = ImageDecoder.decodeBitmap(source)
-                            }
-                        }
+                        ChooseImageButton(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(5f),
+                            text = "Choose Image",
+                            state = state
+                        )
                     }
                     Column(
                         modifier = Modifier.weight(5f),
@@ -89,10 +76,19 @@ fun QrLayout(state: MainState) {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .weight(5f),
+                            text = "Background color")
+                        {
+                            state.showColorPicker = true
+                            state.selectorMode = ColorSelector.BACKGROUND
+                        }
+                        CustomButton(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(5f),
                             text = "Generate Qr"
                         ) {
                             if (state.url.isNotEmpty()) {
-                                state.qrGenerated = QrGenerator().processQr(state.url)
+                                state.qrGenerated = QrGenerator().processQr(state)
                             }
                         }
                     }
