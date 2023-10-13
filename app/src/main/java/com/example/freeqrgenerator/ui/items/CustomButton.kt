@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun CustomButton(modifier: Modifier, text: String, onClickListener: () -> Unit) {
+fun CustomButton(modifier: Modifier = Modifier, text: String, onClickListener: () -> Unit) {
     Button(
         shape = RoundedCornerShape(10),
         onClick = { onClickListener() },
