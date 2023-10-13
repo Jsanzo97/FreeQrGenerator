@@ -51,13 +51,6 @@ fun QrLayout(state: MainState) {
                         modifier = Modifier.weight(5f),
                         verticalArrangement = Arrangement.spacedBy(16.dp),
                     ) {
-                        ChooseImageButton(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(5f),
-                            text = "Choose Image",
-                            state = state
-                        )
                         CustomButton(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -67,6 +60,13 @@ fun QrLayout(state: MainState) {
                             state.showColorPicker = true
                             state.selectorMode = ColorSelector.FOREGROUND
                         }
+                        ChooseImageButton(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(5f),
+                            text = "Choose Image",
+                            state = state
+                        )
                     }
                     Column(
                         modifier = Modifier.weight(5f),
@@ -76,20 +76,20 @@ fun QrLayout(state: MainState) {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .weight(5f),
-                            text = "Generate Qr"
-                        ) {
-                            if (state.url.isNotEmpty()) {
-                                state.qrGenerated = QrGenerator().processQr(state)
-                            }
+                            text = "Background color")
+                        {
+                            state.showColorPicker = true
+                            state.selectorMode = ColorSelector.BACKGROUND
                         }
                         CustomButton(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .weight(5f),
-                            text = "Background color")
-                        {
-                            state.showColorPicker = true
-                            state.selectorMode = ColorSelector.BACKGROUND
+                            text = "Generate Qr"
+                        ) {
+                            if (state.url.isNotEmpty()) {
+                                state.qrGenerated = QrGenerator().processQr(state)
+                            }
                         }
                     }
                 }
