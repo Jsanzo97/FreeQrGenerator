@@ -1,21 +1,27 @@
 package com.example.freeqrgenerator.ui.items
 
-import android.graphics.ImageDecoder
 import android.net.Uri
-import android.os.Build
-import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import com.example.freeqrgenerator.MainState
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.freeqrgenerator.MainActivityViewModel
 
 @Composable
-fun ChooseImageButton(modifier: Modifier, text: String, state: MainState) {
+fun ChooseImageButton(viewModel: MainActivityViewModel = viewModel(), modifier: Modifier, text: String) {
+    val contentResolver = LocalContext.current.contentResolver
+
+    var uri: Uri? by remember { mutableStateOf(null) }
+
     val launcher = rememberLauncherForActivityResult(contract =
-    ActivityResultContracts.GetContent()) { uri: Uri? ->
-        state.imageUri = uri
+    ActivityResultContracts.GetContent()) {
+        uri = it
     }
 
     CustomButton(
@@ -25,15 +31,5 @@ fun ChooseImageButton(modifier: Modifier, text: String, state: MainState) {
         launcher.launch("image/*")
     }
 
-    state.imageUri?.let {
-        if (Build.VERSION.SDK_INT < 28) {
-            state.bitmap = MediaStore.Images
-                .Media.getBitmap(LocalContext.current.contentResolver,it)
-
-        } else {
-            val source = ImageDecoder
-                .createSource(LocalContext.current.contentResolver,it)
-            state.bitmap = ImageDecoder.decodeBitmap(source)
-        }
-    }
+    viewModel.generateBitmapFromUri(uri, contentResolver)
 }
