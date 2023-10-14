@@ -11,29 +11,35 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import com.example.freeqrgenerator.MainState
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.freeqrgenerator.MainActivityViewModel
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 
 @Composable
-fun QrPreview(state: MainState) {
+fun QrPreview(viewModel: MainActivityViewModel = viewModel()) {
+    val uiState by viewModel.uiState.collectAsState()
+
     Box(
         modifier = Modifier
             .border(
-                width = if (state.qrGenerated == null) 1.dp else 0.dp,
-                color = if (state.qrGenerated == null) Color.Black else Color.White,
+                width = if (uiState.qrGenerated == null) 1.dp else 0.dp,
+                color = if (uiState.qrGenerated == null) Color.Black else Color.White,
             )
             .width(360.dp)
             .height(360.dp),
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = rememberDrawablePainter(drawable = state.qrGenerated),
+            painter = rememberDrawablePainter(drawable = uiState.qrGenerated),
             contentDescription = "Qr generated",
             modifier = Modifier
                 .fillMaxWidth()
@@ -41,10 +47,11 @@ fun QrPreview(state: MainState) {
                 .wrapContentHeight(),
         )
 
-        state.bitmap?.asImageBitmap()?.let {
+        uiState.bitmap?.asImageBitmap()?.let {
             Image(
                 bitmap = it,
                 contentDescription = "Qr generated",
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .width(96.dp)
                     .height(96.dp)
