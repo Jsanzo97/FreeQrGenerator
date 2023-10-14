@@ -7,15 +7,20 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.freeqrgenerator.MainState
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.freeqrgenerator.MainActivityViewModel
 
 @Composable
-fun QrLayout(state: MainState) {
+fun QrLayout(viewModel: MainActivityViewModel = viewModel()) {
+    val uiState by viewModel.uiState.collectAsState()
+
     CustomColorPickerButton(
-        state = state
+        viewModel
     )
     Column {
         Row(
@@ -25,9 +30,10 @@ fun QrLayout(state: MainState) {
                 .fillMaxWidth()
                 .weight(7f)
         ) {
-            QrPreview(state)
+            QrPreview(
+                viewModel
+            )
         }
-
         Row(
             modifier = Modifier
                 .weight(3f)
@@ -41,7 +47,7 @@ fun QrLayout(state: MainState) {
                 Row(
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    UrlInput(state)
+                    UrlInput(viewModel)
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -57,15 +63,14 @@ fun QrLayout(state: MainState) {
                                 .weight(5f),
                             text = "Main color")
                         {
-                            state.showColorPicker = true
-                            state.selectorMode = ColorSelector.FOREGROUND
+                            viewModel.showColorPicker(ColorSelector.FOREGROUND)
                         }
                         ChooseImageButton(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .weight(5f),
                             text = "Choose Image",
-                            state = state
+                            viewModel = viewModel
                         )
                     }
                     Column(
@@ -78,17 +83,16 @@ fun QrLayout(state: MainState) {
                                 .weight(5f),
                             text = "Background color")
                         {
-                            state.showColorPicker = true
-                            state.selectorMode = ColorSelector.BACKGROUND
+                            viewModel.showColorPicker(ColorSelector.BACKGROUND)
                         }
                         CustomButton(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .weight(5f),
-                            text = "Generate Qr"
+                            text = "Save Qr"
                         ) {
-                            if (state.url.isNotEmpty()) {
-                                state.qrGenerated = QrGenerator().processQr(state)
+                            if (uiState.url.isEmpty()) {
+                                viewModel.handleEmptyUrlError()
                             }
                         }
                     }

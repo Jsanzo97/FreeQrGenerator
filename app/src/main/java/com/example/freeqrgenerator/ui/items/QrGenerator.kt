@@ -1,8 +1,8 @@
 package com.example.freeqrgenerator.ui.items
 
 import android.graphics.drawable.Drawable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import com.example.freeqrgenerator.MainState
 import com.github.alexzhirkevich.customqrgenerator.QrData
 import com.github.alexzhirkevich.customqrgenerator.vector.QrCodeDrawable
 import com.github.alexzhirkevich.customqrgenerator.vector.createQrVectorOptions
@@ -10,19 +10,19 @@ import com.github.alexzhirkevich.customqrgenerator.vector.style.QrVectorColor
 
 class QrGenerator {
 
-    fun processQr(state: MainState): Drawable {
+    fun processQr(foregroundColor: Color, backgroundColor: Color, url: String): Drawable {
         val options = createQrVectorOptions {
             colors {
-                dark = QrVectorColor.Solid(state.foregroundColor.toArgb())
-                ball = QrVectorColor.Solid(state.foregroundColor.toArgb())
-                frame = QrVectorColor.Solid(state.foregroundColor.toArgb())
+                dark = QrVectorColor.Solid(foregroundColor.toArgb())
+                ball = QrVectorColor.Solid(foregroundColor.toArgb())
+                frame = QrVectorColor.Solid(foregroundColor.toArgb())
             }
             background {
-                color = QrVectorColor.Solid(state.backgroundColor.toArgb())
+                color = QrVectorColor.Solid(backgroundColor.toArgb())
             }
         }
 
-        return QrCodeDrawable(QrData.Url(state.url), options)
+        return QrCodeDrawable(QrData.Url(url), options)
     }
 
 }
