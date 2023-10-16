@@ -93,6 +93,8 @@ fun QrLayout(viewModel: MainActivityViewModel = viewModel()) {
                         ) {
                             if (uiState.url.isEmpty()) {
                                 viewModel.handleEmptyUrlError()
+                            } else {
+
                             }
                         }
                     }

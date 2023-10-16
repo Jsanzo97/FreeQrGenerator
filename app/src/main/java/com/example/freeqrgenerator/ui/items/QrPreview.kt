@@ -1,5 +1,7 @@
 package com.example.freeqrgenerator.ui.items
 
+import android.app.Activity
+import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -13,12 +15,22 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.boundsInRoot
+import androidx.compose.ui.layout.boundsInWindow
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.freeqrgenerator.MainActivityViewModel
@@ -28,6 +40,8 @@ import com.google.accompanist.drawablepainter.rememberDrawablePainter
 fun QrPreview(viewModel: MainActivityViewModel = viewModel()) {
     val uiState by viewModel.uiState.collectAsState()
 
+    var bounds by remember { mutableStateOf<Rect?>(null) }
+
     Box(
         modifier = Modifier
             .border(
@@ -35,7 +49,15 @@ fun QrPreview(viewModel: MainActivityViewModel = viewModel()) {
                 color = if (uiState.qrGenerated == null) Color.Black else Color.White,
             )
             .width(360.dp)
-            .height(360.dp),
+            .height(360.dp)
+            .onGloballyPositioned {
+                bounds =
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        it.boundsInWindow()
+                     } else {
+                         it.boundsInRoot()
+                     }
+            },
         contentAlignment = Alignment.Center
     ) {
         Image(
@@ -60,5 +82,10 @@ fun QrPreview(viewModel: MainActivityViewModel = viewModel()) {
                     .wrapContentHeight(),
             )
         }
+
+        viewModel.setQrViewAndWindow(
+            bounds,
+            (LocalContext.current as Activity).window
+        )
     }
 }
