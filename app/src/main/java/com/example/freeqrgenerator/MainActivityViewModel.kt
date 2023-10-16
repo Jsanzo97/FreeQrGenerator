@@ -1,10 +1,18 @@
 package com.example.freeqrgenerator
 
+import android.app.Activity
 import android.content.ContentResolver
+import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
+import android.view.PixelCopy
+import android.view.View
+import android.view.Window
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import com.example.freeqrgenerator.ui.items.ColorSelector
@@ -13,6 +21,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+
 
 class MainActivityViewModel: ViewModel() {
     private val _uiState = MutableStateFlow(MainState())
@@ -108,6 +117,37 @@ class MainActivityViewModel: ViewModel() {
             it.copy(
                 error = MainError.URL_EMPTY
             )
+        }
+    }
+
+    fun setQrViewAndWindow(bounds: Rect?, window: Window) {
+        _uiState.update {
+            it.copy(
+                qrBounds = bounds,
+                qrWindow = window
+            )
+        }
+    }
+
+    fun getBitmapFromView(callback: (Bitmap) -> Unit) {
+        with(uiState.value) {
+            if (qrBounds != null && qrWindow != null) {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                    val bitmap = Bitmap.createBitmap(
+                        qrBounds.width.toInt(),
+                        qrBounds.height.toInt(),
+                        Bitmap.Config.ARGB_8888
+                    )
+
+                    callback(bitmap)
+                } else {
+                    PixelCopy.request(
+                        qrWindow,
+                        bounds.toAndroidRect(),
+                        bitmap
+                    )
+                }
+            }
         }
     }
 }
