@@ -2,7 +2,6 @@ package com.example.freeqrgenerator
 
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
-import android.view.View
 import android.view.Window
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
@@ -19,5 +18,4 @@ data class MainState (
     val error: MainError = MainError.NONE,
     val qrBounds: Rect? = null,
     val qrWindow: Window? = null,
-    val viewToScreenshot: View? = null
 )

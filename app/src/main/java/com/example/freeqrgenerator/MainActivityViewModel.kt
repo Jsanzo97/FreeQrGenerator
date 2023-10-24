@@ -16,6 +16,7 @@ import android.provider.MediaStore
 import android.view.PixelCopy
 import android.view.View
 import android.view.Window
+import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.Color
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.drawable.toDrawable
@@ -41,7 +42,8 @@ class MainActivityViewModel: ViewModel() {
     private fun generateQr() {
         _uiState.update {
             with(uiState.value) {
-                it.copy(qrGenerated =
+                it.copy(
+                    qrGenerated =
                     QrGenerator().processQr(
                         foregroundColor,
                         backgroundColor,
@@ -49,18 +51,6 @@ class MainActivityViewModel: ViewModel() {
                     )
                 )
             }
-        }
-    }
-
-    fun setViewToScreenshot(view: View) {
-        _uiState.update {
-            it.copy(viewToScreenshot = view)
-        }
-    }
-
-    fun updateBitmap(bitmap: Bitmap, resources: Resources) {
-        _uiState.update {
-            it.copy(qrGenerated = bitmap.toDrawable(resources))
         }
     }
 
@@ -153,7 +143,8 @@ class MainActivityViewModel: ViewModel() {
     }
 
 
-    fun getBitmapFromView(callback: (Bitmap) -> Unit) {
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getBitmapFromView(callback: (Bitmap) -> Unit) {
         with(uiState.value) {
             if (qrBounds != null && qrWindow != null) {
 
@@ -163,61 +154,57 @@ class MainActivityViewModel: ViewModel() {
                     Bitmap.Config.ARGB_8888
                 )
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    val rect = Rect(
-                        qrBounds.left.roundToInt(),
-                        qrBounds.top.roundToInt(),
-                        qrBounds.right.roundToInt(),
-                        qrBounds.bottom.roundToInt()
-                    )
-                    PixelCopy.request(
-                        qrWindow,
-                        rect,
-                        bitmap,
-                        {
-                            callback(bitmap)
-                        },
-                        Handler(Looper.getMainLooper())
-                    )
-                } else {
-                    bitmap.applyCanvas {
-                        translate(-qrBounds.left, -qrBounds.top)
-                        viewToScreenshot?.draw(this)
-                    }
-                    callback(bitmap)
-                }
+                val rect = Rect(
+                    qrBounds.left.roundToInt(),
+                    qrBounds.top.roundToInt(),
+                    qrBounds.right.roundToInt(),
+                    qrBounds.bottom.roundToInt()
+                )
+                PixelCopy.request(
+                    qrWindow,
+                    rect,
+                    bitmap,
+                    {
+                        callback(bitmap)
+                    },
+                    Handler(Looper.getMainLooper())
+                )
             }
         }
     }
 
-    fun saveImage(bitmap: Bitmap, context: Context, folderName: String, callback: (String) -> Unit) {
-        if (Build.VERSION.SDK_INT >= 29) {
-            val path = "Pictures/" + folderName
-            val values = contentValues()
-            values.put(MediaStore.Images.Media.RELATIVE_PATH, path)
-            values.put(MediaStore.Images.Media.IS_PENDING, true)
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun saveImage(context: Context, folderName: String, callback: (String) -> Unit) {
+        getBitmapFromView {
+            if (Build.VERSION.SDK_INT >= 29) {
+                val path = "Pictures/" + folderName
+                val values = contentValues()
+                values.put(MediaStore.Images.Media.RELATIVE_PATH, path)
+                values.put(MediaStore.Images.Media.IS_PENDING, true)
 
-            val uri: Uri? = context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
-            if (uri != null) {
-                saveImageToStream(bitmap, context.contentResolver.openOutputStream(uri))
-                values.put(MediaStore.Images.Media.IS_PENDING, false)
-                context.contentResolver.update(uri, values, null, null)
-            }
-            callback(path)
-        } else {
-            val directory = File(Environment.getExternalStorageDirectory().toString() + separator + folderName)
+                val uri: Uri? = context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+                if (uri != null) {
+                    saveImageToStream(it, context.contentResolver.openOutputStream(uri))
+                    values.put(MediaStore.Images.Media.IS_PENDING, false)
+                    context.contentResolver.update(uri, values, null, null)
+                }
+                callback(path)
+            } else {
+                val directory = File(Environment.getExternalStorageDirectory().toString() + separator + folderName)
 
-            if (!directory.exists()) {
-                directory.mkdirs()
+                if (!directory.exists()) {
+                    directory.mkdirs()
+                }
+                val fileName = System.currentTimeMillis().toString() + ".png"
+                val file = File(directory, fileName)
+                saveImageToStream(it, FileOutputStream(file))
+                val values = contentValues()
+                values.put(MediaStore.Images.Media.DATA, file.absolutePath)
+                context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+                callback(directory.path)
             }
-            val fileName = System.currentTimeMillis().toString() + ".png"
-            val file = File(directory, fileName)
-            saveImageToStream(bitmap, FileOutputStream(file))
-            val values = contentValues()
-            values.put(MediaStore.Images.Media.DATA, file.absolutePath)
-            context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
-            callback(directory.path)
         }
+
     }
 
     private fun contentValues() : ContentValues {
