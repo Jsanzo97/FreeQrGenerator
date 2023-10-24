@@ -1,5 +1,6 @@
 package com.example.freeqrgenerator.ui.items
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,6 +12,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.freeqrgenerator.MainActivityViewModel
@@ -18,6 +20,9 @@ import com.example.freeqrgenerator.MainActivityViewModel
 @Composable
 fun QrLayout(viewModel: MainActivityViewModel = viewModel()) {
     val uiState by viewModel.uiState.collectAsState()
+
+    val context = LocalContext.current
+    val resources = LocalContext.current.resources
 
     CustomColorPickerButton(
         viewModel
@@ -30,9 +35,7 @@ fun QrLayout(viewModel: MainActivityViewModel = viewModel()) {
                 .fillMaxWidth()
                 .weight(7f)
         ) {
-            QrPreview(
-                viewModel
-            )
+            QrPreview(viewModel)
         }
         Row(
             modifier = Modifier
@@ -94,7 +97,11 @@ fun QrLayout(viewModel: MainActivityViewModel = viewModel()) {
                             if (uiState.url.isEmpty()) {
                                 viewModel.handleEmptyUrlError()
                             } else {
-
+                                viewModel.getBitmapFromView {
+                                    viewModel.saveImage(it, context, "FreeQr") {
+                                        Toast.makeText(context, "Image saved in " + it, Toast.LENGTH_LONG).show()
+                                    }
+                                }
                             }
                         }
                     }

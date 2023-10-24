@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.toAndroidRect
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.boundsInWindow
@@ -42,6 +43,12 @@ fun QrPreview(viewModel: MainActivityViewModel = viewModel()) {
 
     var bounds by remember { mutableStateOf<Rect?>(null) }
 
+    viewModel.setViewToScreenshot(LocalView.current)
+    viewModel.setQrViewAndWindow(
+        bounds,
+        (LocalContext.current as Activity).window
+    )
+
     Box(
         modifier = Modifier
             .border(
@@ -51,12 +58,7 @@ fun QrPreview(viewModel: MainActivityViewModel = viewModel()) {
             .width(360.dp)
             .height(360.dp)
             .onGloballyPositioned {
-                bounds =
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        it.boundsInWindow()
-                     } else {
-                         it.boundsInRoot()
-                     }
+                bounds = it.boundsInWindow()
             },
         contentAlignment = Alignment.Center
     ) {
@@ -82,10 +84,5 @@ fun QrPreview(viewModel: MainActivityViewModel = viewModel()) {
                     .wrapContentHeight(),
             )
         }
-
-        viewModel.setQrViewAndWindow(
-            bounds,
-            (LocalContext.current as Activity).window
-        )
     }
 }

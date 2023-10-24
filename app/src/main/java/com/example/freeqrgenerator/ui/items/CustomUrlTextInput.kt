@@ -9,6 +9,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -18,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
@@ -48,7 +50,15 @@ fun UrlInput(viewModel: MainActivityViewModel = viewModel()) {
         value = text,
         onValueChange = {
             text = it
+            viewModel.updateUrl(text)
         },
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedTextColor = Color.Black,
+            unfocusedTextColor = Color.Black,
+            errorBorderColor = Color.Red,
+            errorTextColor = Color.Red,
+            errorPlaceholderColor = Color.Red,
+        ),
         label = { Text("Introduce your url") },
         isError = uiState.error == MainError.URL_EMPTY,
         trailingIcon = {
@@ -56,7 +66,7 @@ fun UrlInput(viewModel: MainActivityViewModel = viewModel()) {
                 Icon(
                     Icons.Filled.Info,
                     "error",
-                    tint = MaterialTheme.colorScheme.error
+                    tint = Color.Red
                 )
             }
         }
