@@ -64,11 +64,11 @@ fun CustomColorPickerButton(viewModel: MainActivityViewModel = viewModel()) {
                     }
                     Box(
                         modifier = Modifier
-                                .height(22.dp)
-                                .width(200.dp)
-                                .clip(RoundedCornerShape(50))
-                                .border(1.dp, Color.Black, RoundedCornerShape(50))
-                                .background(color)
+                            .height(22.dp)
+                            .width(200.dp)
+                            .clip(RoundedCornerShape(50))
+                            .border(1.dp, Color.Black, RoundedCornerShape(50))
+                            .background(color)
                     )
                     Row(
                         modifier = Modifier
