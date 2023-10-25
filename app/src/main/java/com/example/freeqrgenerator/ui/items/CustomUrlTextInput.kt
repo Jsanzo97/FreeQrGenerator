@@ -5,7 +5,9 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -60,7 +62,6 @@ fun UrlInput(viewModel: MainActivityViewModel = viewModel()) {
             errorTextColor = Color.Red,
             errorPlaceholderColor = Color.Red,
         ),
-        label = { Text("Introduce your url") },
         isError = uiState.error == MainError.URL_EMPTY,
         trailingIcon = {
             if (uiState.error == MainError.URL_EMPTY) {
