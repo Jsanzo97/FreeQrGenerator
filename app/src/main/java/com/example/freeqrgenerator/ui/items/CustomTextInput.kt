@@ -20,12 +20,14 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.freeqrgenerator.MainActivityViewModel
 import com.example.freeqrgenerator.MainError
+import com.example.freeqrgenerator.R
 
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun UrlInput(viewModel: MainActivityViewModel = viewModel()) {
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -49,7 +51,7 @@ fun UrlInput(viewModel: MainActivityViewModel = viewModel()) {
         onValueChange = {
             text = it
         },
-        label = { Text("Introduce your url") },
+        label = { Text(stringResource(id = R.string.qr_introduce_url)) },
         isError = uiState.error == MainError.URL_EMPTY,
         trailingIcon = {
             if (uiState.error == MainError.URL_EMPTY) {

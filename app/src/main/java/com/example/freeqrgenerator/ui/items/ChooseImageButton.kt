@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.freeqrgenerator.MainActivityViewModel
+import com.example.freeqrgenerator.ui.utils.Constants
 
 @Composable
 fun ChooseImageButton(viewModel: MainActivityViewModel = viewModel(), modifier: Modifier, text: String) {
@@ -28,7 +29,7 @@ fun ChooseImageButton(viewModel: MainActivityViewModel = viewModel(), modifier: 
         modifier = modifier,
         text = text
     ) {
-        launcher.launch("image/*")
+        launcher.launch(Constants.IMAGE_LAUNCHER)
     }
 
     viewModel.generateBitmapFromUri(uri, contentResolver)

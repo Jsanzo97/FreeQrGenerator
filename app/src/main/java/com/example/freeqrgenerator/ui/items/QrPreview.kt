@@ -19,9 +19,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.freeqrgenerator.MainActivityViewModel
+import com.example.freeqrgenerator.R
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 
 @Composable
@@ -30,34 +32,34 @@ fun QrPreview(viewModel: MainActivityViewModel = viewModel()) {
 
     Box(
         modifier = Modifier
-            .border(
-                width = if (uiState.qrGenerated == null) 1.dp else 0.dp,
-                color = if (uiState.qrGenerated == null) Color.Black else Color.White,
-            )
-            .width(360.dp)
-            .height(360.dp),
+                .border(
+                        width = if (uiState.qrGenerated == null) 1.dp else 0.dp,
+                        color = if (uiState.qrGenerated == null) Color.Black else Color.White,
+                )
+                .width(360.dp)
+                .height(360.dp),
         contentAlignment = Alignment.Center
     ) {
         Image(
             painter = rememberDrawablePainter(drawable = uiState.qrGenerated),
-            contentDescription = "Qr generated",
+            contentDescription = stringResource(id = R.string.qr_image_content_description),
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .wrapContentHeight(),
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .wrapContentHeight(),
         )
 
         uiState.bitmap?.asImageBitmap()?.let {
             Image(
                 bitmap = it,
-                contentDescription = "Qr generated",
+                contentDescription = stringResource(id = R.string.qr_image_content_description),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .width(96.dp)
-                    .height(96.dp)
-                    .clip(CircleShape)
-                    .background(Color.Transparent)
-                    .wrapContentHeight(),
+                        .width(96.dp)
+                        .height(96.dp)
+                        .clip(CircleShape)
+                        .background(Color.Transparent)
+                        .wrapContentHeight(),
             )
         }
     }

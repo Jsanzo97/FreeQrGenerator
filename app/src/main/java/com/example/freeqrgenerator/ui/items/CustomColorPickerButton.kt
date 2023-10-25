@@ -25,9 +25,11 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.freeqrgenerator.MainActivityViewModel
+import com.example.freeqrgenerator.R
 import io.mhssn.colorpicker.ColorPicker
 import io.mhssn.colorpicker.ColorPickerType
 
@@ -62,11 +64,11 @@ fun CustomColorPickerButton(viewModel: MainActivityViewModel = viewModel()) {
                     }
                     Box(
                         modifier = Modifier
-                            .height(22.dp)
-                            .width(200.dp)
-                            .clip(RoundedCornerShape(50))
-                            .border(1.dp, Color.Black, RoundedCornerShape(50))
-                            .background(color)
+                                .height(22.dp)
+                                .width(200.dp)
+                                .clip(RoundedCornerShape(50))
+                                .border(1.dp, Color.Black, RoundedCornerShape(50))
+                                .background(color)
                     )
                     Row(
                         modifier = Modifier
@@ -76,7 +78,7 @@ fun CustomColorPickerButton(viewModel: MainActivityViewModel = viewModel()) {
                         CustomButton(
                             modifier = Modifier
                                 .fillMaxWidth(),
-                            text = "Close"
+                            text = stringResource(id = R.string.qr_save_image)
                         ) {
                             viewModel.hideColorPicker()
                         }
