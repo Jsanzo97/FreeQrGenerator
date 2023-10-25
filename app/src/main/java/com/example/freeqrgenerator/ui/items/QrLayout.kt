@@ -16,7 +16,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.freeqrgenerator.MainActivityViewModel
@@ -31,7 +30,6 @@ fun QrLayout(viewModel: MainActivityViewModel = viewModel()) {
     val uiState by viewModel.uiState.collectAsState()
 
     val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
 
     val writePermissionState = rememberPermissionState(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
