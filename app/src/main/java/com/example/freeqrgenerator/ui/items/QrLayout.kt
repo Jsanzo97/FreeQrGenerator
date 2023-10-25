@@ -11,17 +11,17 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.freeqrgenerator.MainActivityViewModel
+import com.example.freeqrgenerator.R
 
 @Composable
 fun QrLayout(viewModel: MainActivityViewModel = viewModel()) {
     val uiState by viewModel.uiState.collectAsState()
 
-    CustomColorPickerButton(
-        viewModel
-    )
+    CustomColorPickerButton(viewModel)
     Column {
         Row(
             horizontalArrangement = Arrangement.Center,
@@ -30,9 +30,7 @@ fun QrLayout(viewModel: MainActivityViewModel = viewModel()) {
                 .fillMaxWidth()
                 .weight(7f)
         ) {
-            QrPreview(
-                viewModel
-            )
+            QrPreview(viewModel)
         }
         Row(
             modifier = Modifier
@@ -61,15 +59,15 @@ fun QrLayout(viewModel: MainActivityViewModel = viewModel()) {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .weight(5f),
-                            text = "Main color")
-                        {
+                            text = stringResource(id = R.string.qr_main_color)
+                        ) {
                             viewModel.showColorPicker(ColorSelector.FOREGROUND)
                         }
                         ChooseImageButton(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .weight(5f),
-                            text = "Choose Image",
+                            text = stringResource(id = R.string.qr_choose_image),
                             viewModel = viewModel
                         )
                     }
@@ -81,15 +79,15 @@ fun QrLayout(viewModel: MainActivityViewModel = viewModel()) {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .weight(5f),
-                            text = "Background color")
-                        {
+                            text = stringResource(id = R.string.qr_background_color)
+                        ) {
                             viewModel.showColorPicker(ColorSelector.BACKGROUND)
                         }
                         CustomButton(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .weight(5f),
-                            text = "Save Qr"
+                            text = stringResource(id = R.string.qr_save_image)
                         ) {
                             if (uiState.url.isEmpty()) {
                                 viewModel.handleEmptyUrlError()
