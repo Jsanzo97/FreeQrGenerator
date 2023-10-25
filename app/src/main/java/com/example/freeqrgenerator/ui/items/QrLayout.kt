@@ -1,5 +1,9 @@
 package com.example.freeqrgenerator.ui.items
 
+import android.Manifest
+import android.os.Build
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,15 +15,25 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.freeqrgenerator.MainActivityViewModel
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 import com.example.freeqrgenerator.R
 
+@OptIn(ExperimentalPermissionsApi::class)
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun QrLayout(viewModel: MainActivityViewModel = viewModel()) {
     val uiState by viewModel.uiState.collectAsState()
+
+    val context = LocalContext.current
+
+    val writePermissionState = rememberPermissionState(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
     CustomColorPickerButton(viewModel)
     Column {
@@ -30,7 +44,7 @@ fun QrLayout(viewModel: MainActivityViewModel = viewModel()) {
                 .fillMaxWidth()
                 .weight(7f)
         ) {
-            QrPreview(viewModel)
+            QrView(viewModel)
         }
         Row(
             modifier = Modifier
@@ -91,6 +105,14 @@ fun QrLayout(viewModel: MainActivityViewModel = viewModel()) {
                         ) {
                             if (uiState.url.isEmpty()) {
                                 viewModel.handleEmptyUrlError()
+                            } else {
+                                if (writePermissionState.status.isGranted) {
+                                    viewModel.saveImage(context, "FreeQr") {
+                                        Toast.makeText(context, "Image saved in " + it, Toast.LENGTH_LONG).show()
+                                    }
+                                } else {
+                                    writePermissionState.launchPermissionRequest()
+                                }
                             }
                         }
                     }
