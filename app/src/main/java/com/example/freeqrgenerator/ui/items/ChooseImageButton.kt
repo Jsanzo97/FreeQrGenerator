@@ -9,20 +9,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.freeqrgenerator.MainActivityViewModel
 import com.example.freeqrgenerator.ui.utils.Constants
 
 @Composable
-fun ChooseImageButton(viewModel: MainActivityViewModel = viewModel(), modifier: Modifier, text: String) {
-    val contentResolver = LocalContext.current.contentResolver
-
+fun ChooseImageButton(
+    modifier: Modifier,
+    text: String,
+    onImageSelected: (uri: Uri?) -> Unit
+) {
     var uri: Uri? by remember { mutableStateOf(null) }
 
     val launcher = rememberLauncherForActivityResult(contract =
     ActivityResultContracts.GetContent()) {
         uri = it
+        onImageSelected(uri)
     }
 
     CustomButton(
@@ -31,6 +31,4 @@ fun ChooseImageButton(viewModel: MainActivityViewModel = viewModel(), modifier: 
     ) {
         launcher.launch(Constants.IMAGE_LAUNCHER)
     }
-
-    viewModel.generateBitmapFromUri(uri, contentResolver)
 }

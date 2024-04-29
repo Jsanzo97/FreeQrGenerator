@@ -6,4 +6,8 @@ class Constants {
         const val STRING_EMPTY = ""
         const val IMAGE_LAUNCHER = "image/*"
     }
+
+    enum class ColorSelectorType {
+        FOREGROUND, BACKGROUND, NONE
+    }
 }

@@ -15,7 +15,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,69 +26,63 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.freeqrgenerator.MainActivityViewModel
 import com.example.freeqrgenerator.R
 import io.mhssn.colorpicker.ColorPicker
 import io.mhssn.colorpicker.ColorPickerType
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
-fun CustomColorPickerButton(viewModel: MainActivityViewModel = viewModel()) {
-    val uiState by viewModel.uiState.collectAsState()
+fun CustomColorPickerButton(
+    onColorSelected: (color: Color) -> Unit,
+    onDismissAction: () -> Unit
+) {
 
     var color by remember { mutableStateOf(Color.White) }
 
-    if (uiState.shouldShowColorPicker) {
-        AlertDialog(
-            onDismissRequest = {
-                viewModel.hideColorPicker()
-            }
+    AlertDialog(
+        onDismissRequest = { onDismissAction() }
+    ) {
+        Surface(
+            modifier = Modifier
+                .clip(RoundedCornerShape(4.dp)),
         ) {
-            Surface(
+            Column(
                 modifier = Modifier
-                    .clip(RoundedCornerShape(4.dp)),
+                    .padding(24.dp),
+                verticalArrangement = Arrangement.spacedBy(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(24.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .padding(24.dp)
-                ) {
-                    ColorPicker(
-                        type = ColorPickerType.Circle()
-                    ) {
+                ColorPicker(
+                    type = ColorPickerType.Circle(),
+                    onPickedColor = {
                         color = it
-                        viewModel.updateColorSelected(it)
+                        onColorSelected(it)
                     }
-                    Box(
+                )
+                Box(
+                    modifier = Modifier
+                        .height(22.dp)
+                        .width(200.dp)
+                        .clip(RoundedCornerShape(50))
+                        .border(1.dp, Color.Black, RoundedCornerShape(50))
+                        .background(color)
+                )
+                Row(
+                    modifier = Modifier
+                        .width(200.dp),
+                    horizontalArrangement = Arrangement.spacedBy(24.dp)
+                ) {
+                    CustomButton(
                         modifier = Modifier
-                            .height(22.dp)
-                            .width(200.dp)
-                            .clip(RoundedCornerShape(50))
-                            .border(1.dp, Color.Black, RoundedCornerShape(50))
-                            .background(color)
+                            .fillMaxWidth(),
+                        text = stringResource(id = R.string.qr_save_color),
+                        onClickListener = { onDismissAction() }
                     )
-                    Row(
-                        modifier = Modifier
-                            .width(200.dp),
-                        horizontalArrangement = Arrangement.spacedBy(24.dp)
-                    ) {
-                        CustomButton(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            text = stringResource(id = R.string.qr_save_image)
-                        ) {
-                            viewModel.hideColorPicker()
-                        }
-                    }
                 }
             }
         }
     }
 }
 
-enum class ColorSelector {
-    FOREGROUND, BACKGROUND, NONE
-}
+
 

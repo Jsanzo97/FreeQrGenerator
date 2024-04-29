@@ -2,3 +2,4 @@
 /release
 ../local.properties
 ../.idea
+./gradle
