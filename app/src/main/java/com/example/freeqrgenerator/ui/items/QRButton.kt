@@ -10,13 +10,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun CustomButton(
+fun QRButton(
     modifier: Modifier = Modifier,
     text: String,
     onClickListener: () -> Unit
 ) {
     Button(
-        shape = RoundedCornerShape(10),
+        shape = RoundedCornerShape(16),
         onClick = { onClickListener() },
         modifier = modifier,
         colors = ButtonDefaults.buttonColors(contentColor = Color.White)
@@ -27,10 +27,10 @@ fun CustomButton(
     }
 }
 
-@Preview(showBackground = true, widthDp = 420)
+@Preview(showBackground = false, widthDp = 420)
 @Composable
-fun CustomButtonPreview() {
-    CustomButton(
+fun QRButtonPreview() {
+    QRButton(
         text = "Test",
         onClickListener = {}
     )

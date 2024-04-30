@@ -6,7 +6,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
-import androidx.compose.material.TextFieldColors
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
@@ -15,17 +14,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.freeqrgenerator.R
+import com.example.freeqrgenerator.ui.theme.FreeQrGeneratorTheme
 
 @Composable
-fun UrlInput(
+fun QRUrlInput(
     onUpdateUrl: (url: String) -> Unit,
     isErrorOnUrl: Boolean
 ) {
@@ -35,7 +35,8 @@ fun UrlInput(
     var text: String by remember { mutableStateOf("") }
 
     OutlinedTextField(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth(),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         keyboardActions = KeyboardActions(
             onDone = {
@@ -51,12 +52,15 @@ fun UrlInput(
         },
         label = { Text(stringResource(id = R.string.qr_introduce_url)) },
         colors = TextFieldDefaults.outlinedTextFieldColors(
-            textColor = Color.Black,
-            focusedBorderColor = Color.Black,
-            focusedLabelColor = Color.Black,
-            errorBorderColor = Color.Red,
-            errorCursorColor = Color.Red,
-            errorLabelColor = Color.Red,
+            textColor = FreeQrGeneratorTheme.colors.opposite,
+            cursorColor = FreeQrGeneratorTheme.colors.opposite,
+            unfocusedBorderColor = FreeQrGeneratorTheme.colors.opposite,
+            unfocusedLabelColor = FreeQrGeneratorTheme.colors.opposite,
+            focusedBorderColor = FreeQrGeneratorTheme.colors.opposite,
+            focusedLabelColor = FreeQrGeneratorTheme.colors.opposite,
+            errorBorderColor = FreeQrGeneratorTheme.colors.error,
+            errorCursorColor = FreeQrGeneratorTheme.colors.error,
+            errorLabelColor = FreeQrGeneratorTheme.colors.error,
         ),
         isError = isErrorOnUrl,
         trailingIcon = {
@@ -68,5 +72,23 @@ fun UrlInput(
                 )
             }
         }
+    )
+}
+
+@Preview(showBackground = true, widthDp = 420)
+@Composable
+fun QRUrlInputPreview() {
+    QRUrlInput(
+        onUpdateUrl = { _ -> },
+        isErrorOnUrl = false
+    )
+}
+
+@Preview(showBackground = true, widthDp = 420)
+@Composable
+fun QRUrlInputErrorPreview() {
+    QRUrlInput(
+        onUpdateUrl = { _ -> },
+        isErrorOnUrl = true
     )
 }

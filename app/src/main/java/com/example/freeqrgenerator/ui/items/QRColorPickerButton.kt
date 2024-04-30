@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.AlertDialog
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.freeqrgenerator.R
@@ -32,7 +32,7 @@ import io.mhssn.colorpicker.ColorPickerType
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun CustomColorPickerButton(
+fun QRColorPickerButton(
     onColorSelected: (color: Color) -> Unit,
     onDismissAction: () -> Unit
 ) {
@@ -72,7 +72,7 @@ fun CustomColorPickerButton(
                         .width(200.dp),
                     horizontalArrangement = Arrangement.spacedBy(24.dp)
                 ) {
-                    CustomButton(
+                    QRButton(
                         modifier = Modifier
                             .fillMaxWidth(),
                         text = stringResource(id = R.string.qr_save_color),
@@ -82,6 +82,15 @@ fun CustomColorPickerButton(
             }
         }
     }
+}
+
+@Preview(showBackground = true, widthDp = 420)
+@Composable
+fun QRColorPickerButtonPreview() {
+    QRColorPickerButton(
+        onColorSelected = {},
+        onDismissAction = {}
+    )
 }
 
 

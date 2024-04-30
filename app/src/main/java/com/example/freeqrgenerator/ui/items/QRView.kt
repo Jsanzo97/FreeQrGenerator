@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,12 +29,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.freeqrgenerator.R
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 
 @Composable
-fun QrView(
+fun QRView(
     qrGenerated: Drawable?,
     bitmapGenerated: Bitmap?,
     onBoundsCalculated: (bounds: Rect?) -> Unit
@@ -51,7 +53,7 @@ fun QrView(
         modifier = Modifier
             .border(
                 width = if (qrGenerated == null) 1.dp else 0.dp,
-                color = if (qrGenerated == null) Color.Black else Color.White,
+                color = if (isSystemInDarkTheme()) Color.White else Color.Black
             )
             .width(360.dp)
             .height(360.dp)
@@ -83,4 +85,14 @@ fun QrView(
             )
         }
     }
+}
+
+@Preview(showBackground = true, widthDp = 420)
+@Composable
+fun QRViewPreview() {
+    QRView(
+        qrGenerated = null,
+        bitmapGenerated = null,
+        onBoundsCalculated = {}
+    )
 }

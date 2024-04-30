@@ -19,7 +19,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import com.example.freeqrgenerator.error.FreeQrError
-import com.example.freeqrgenerator.ui.items.QrGenerator
+import com.example.freeqrgenerator.generator.QRGenerator
 import com.example.freeqrgenerator.ui.utils.Constants.ColorSelectorType
 import com.example.freeqrgenerator.ui.utils.Constants.Companion.STRING_EMPTY
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -64,7 +64,7 @@ class MainActivityViewModel: ViewModel() {
     val qrWindow = _qrWindow.asStateFlow()
 
     private fun generateQr() {
-        _qrGenerated.value = QrGenerator()
+        _qrGenerated.value = QRGenerator()
             .processQr(
                 _foregroundColor.value,
                 _backgroundColor.value,

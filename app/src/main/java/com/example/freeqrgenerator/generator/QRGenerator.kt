@@ -1,4 +1,4 @@
-package com.example.freeqrgenerator.ui.items
+package com.example.freeqrgenerator.generator
 
 import android.graphics.drawable.Drawable
 import androidx.compose.ui.graphics.Color
@@ -8,7 +8,7 @@ import com.github.alexzhirkevich.customqrgenerator.vector.QrCodeDrawable
 import com.github.alexzhirkevich.customqrgenerator.vector.createQrVectorOptions
 import com.github.alexzhirkevich.customqrgenerator.vector.style.QrVectorColor
 
-class QrGenerator {
+class QRGenerator {
 
     fun processQr(foregroundColor: Color, backgroundColor: Color, url: String): Drawable {
         val options = createQrVectorOptions {

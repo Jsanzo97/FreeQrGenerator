@@ -17,25 +17,3 @@ val tertiary_dark = Pink80
 val primary_light = Purple40
 val secondary_light = PurpleGrey40
 val tertiary_light = Pink40
-
-
-sealed class ThemeColors(
-    val background: Color,
-    val surface: Color,
-    val primary: Color,
-    val text: Color
-) {
-    object Night: ThemeColors(
-        background = Color.Black,
-        surface = secondary_dark,
-        primary = primary_dark,
-        text = tertiary_dark
-    )
-
-    object Day: ThemeColors(
-        background = Color.White,
-        surface = secondary_light,
-        primary = primary_light,
-        text = tertiary_light
-    )
-}
