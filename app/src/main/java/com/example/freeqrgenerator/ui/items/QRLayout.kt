@@ -14,8 +14,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
@@ -131,83 +133,63 @@ fun Content(
     }
 
     Column(
-        modifier = Modifier.background(color = FreeQrGeneratorTheme.colors.background)
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = FreeQrGeneratorTheme.colors.background),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
+        QRView(
             modifier = Modifier
-                .fillMaxWidth()
-                .weight(7f)
+                .padding(top = 32.dp),
+            qrGenerated = qrGenerated,
+            bitmapGenerated = bitmapGenerated,
+            onBoundsCalculated = { onBoundsCalculated(it) }
+        )
+        QRUrlInput(
+            modifier = Modifier
+                .padding(
+                    vertical = 32.dp,
+                    horizontal = 16.dp
+                ),
+            onUpdateUrl = { onUpdateUrl(it) },
+            isErrorOnUrl = isErrorOnUrl
+        )
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally)
         ) {
-            QRView(
-                qrGenerated = qrGenerated,
-                bitmapGenerated = bitmapGenerated,
-                onBoundsCalculated = { onBoundsCalculated(it) }
+            QRCircularButton(
+                text = stringResource(id = R.string.qr_main_color),
+                backgroundColor = foregroundColor,
+                borderColor = FreeQrGeneratorTheme.colors.opposite,
+                onClickListener = { showColorSelector(ColorSelectorType.FOREGROUND) }
             )
-        }
-        Row(
-            modifier = Modifier
-                .weight(3f)
-        ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(24.dp, Alignment.Bottom),
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .padding(24.dp)
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    QRUrlInput(
-                        onUpdateUrl = { onUpdateUrl(it) },
-                        isErrorOnUrl = isErrorOnUrl
-                    )
+
+            QRCircularButton(
+                text = stringResource(id = R.string.qr_background_color),
+                backgroundColor = backgroundColor,
+                borderColor = FreeQrGeneratorTheme.colors.opposite,
+                onClickListener = { showColorSelector(ColorSelectorType.BACKGROUND) }
+            )
+
+            QRCircularButton(
+                text = stringResource(id = R.string.qr_choose_image),
+                icon = Icons.Default.CameraAlt,
+                onClickListener = {
+                    launcher.launch(Constants.IMAGE_LAUNCHER)
                 }
-                LazyRow(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(24.dp)
-                ) {
-                    item {
-                        QRCircularButton(
-                            text = stringResource(id = R.string.qr_main_color),
-                            backgroundColor = foregroundColor,
-                            borderColor = FreeQrGeneratorTheme.colors.opposite,
-                            onClickListener = { showColorSelector(ColorSelectorType.FOREGROUND) }
-                        )
-                    }
+            )
 
-                    item {
-                        QRCircularButton(
-                            text = stringResource(id = R.string.qr_background_color),
-                            backgroundColor = backgroundColor,
-                            borderColor = FreeQrGeneratorTheme.colors.opposite,
-                            onClickListener = { showColorSelector(ColorSelectorType.BACKGROUND) }
-                        )
-                    }
-
-                    item {
-                        QRCircularButton(
-                            text = stringResource(id = R.string.qr_choose_image),
-                            icon = Icons.Default.CameraAlt,
-                            onClickListener = {
-                                launcher.launch(Constants.IMAGE_LAUNCHER)
-                            }
-                        )
-                    }
-
-                    item {
-                        QRCircularButton(
-                            text = stringResource(id = R.string.qr_save_image),
-                            icon = Icons.Default.SaveAs,
-                            onClickListener = {
-                                localFocusManager.clearFocus(force = true)
-                                onSaveQr()
-                            }
-                        )
-                    }
+            QRCircularButton(
+                text = stringResource(id = R.string.qr_save_image),
+                icon = Icons.Default.SaveAs,
+                onClickListener = {
+                    localFocusManager.clearFocus(force = true)
+                    onSaveQr()
                 }
-            }
+            )
         }
     }
 }

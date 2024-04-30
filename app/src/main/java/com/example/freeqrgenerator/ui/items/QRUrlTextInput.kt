@@ -26,6 +26,7 @@ import com.example.freeqrgenerator.ui.theme.FreeQrGeneratorTheme
 
 @Composable
 fun QRUrlInput(
+    modifier: Modifier = Modifier,
     onUpdateUrl: (url: String) -> Unit,
     isErrorOnUrl: Boolean
 ) {
@@ -35,7 +36,7 @@ fun QRUrlInput(
     var text: String by remember { mutableStateOf("") }
 
     OutlinedTextField(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth(),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         keyboardActions = KeyboardActions(

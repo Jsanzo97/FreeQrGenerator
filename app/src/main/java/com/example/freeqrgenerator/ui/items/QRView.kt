@@ -36,6 +36,7 @@ import com.google.accompanist.drawablepainter.rememberDrawablePainter
 
 @Composable
 fun QRView(
+    modifier: Modifier = Modifier,
     qrGenerated: Drawable?,
     bitmapGenerated: Bitmap?,
     onBoundsCalculated: (bounds: Rect?) -> Unit
@@ -50,7 +51,7 @@ fun QRView(
     }
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .border(
                 width = if (qrGenerated == null) 1.dp else 0.dp,
                 color = if (isSystemInDarkTheme()) Color.White else Color.Black
