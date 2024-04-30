@@ -70,6 +70,8 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended:1.6.6")
     implementation("androidx.compose.compiler:compiler:1.5.12")
     implementation("androidx.compose.runtime:runtime:1.6.6")
+    implementation("com.airbnb.android:lottie-compose:6.3.0")
+    implementation("androidx.navigation:navigation-compose:2.7.7")
 
     testImplementation("junit:junit:4.13.2")
 
