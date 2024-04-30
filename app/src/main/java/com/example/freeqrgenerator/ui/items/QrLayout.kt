@@ -20,6 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -94,6 +96,9 @@ fun Content(
     onSaveQr: () -> Unit,
     onDismissAction: () -> Unit
 ) {
+
+    val localFocusManager = LocalFocusManager.current
+
     if (showColorPicker) {
         CustomColorPickerButton(
             onColorSelected = { onColorSelected(it) },
@@ -172,7 +177,10 @@ fun Content(
                                 .fillMaxWidth()
                                 .weight(5f),
                             text = stringResource(id = R.string.qr_save_image),
-                            onClickListener = { onSaveQr() }
+                            onClickListener = {
+                                localFocusManager.clearFocus(force = true)
+                                onSaveQr()
+                            }
                         )
                     }
                 }

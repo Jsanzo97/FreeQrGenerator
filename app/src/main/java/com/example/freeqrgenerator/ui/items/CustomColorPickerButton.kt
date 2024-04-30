@@ -11,9 +11,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Surface
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,11 +25,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import com.example.freeqrgenerator.R
 import io.mhssn.colorpicker.ColorPicker
 import io.mhssn.colorpicker.ColorPickerType
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun CustomColorPickerButton(
     onColorSelected: (color: Color) -> Unit,
@@ -39,7 +39,7 @@ fun CustomColorPickerButton(
 
     var color by remember { mutableStateOf(Color.White) }
 
-    AlertDialog(
+    Dialog(
         onDismissRequest = { onDismissAction() }
     ) {
         Surface(
