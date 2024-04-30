@@ -3,10 +3,10 @@ package com.example.freeqrgenerator
 import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.graphics.Rect
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -14,19 +14,16 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
 import android.view.PixelCopy
-import android.view.View
 import android.view.Window
 import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.Color
-import androidx.core.graphics.applyCanvas
-import androidx.core.graphics.drawable.toDrawable
 import androidx.lifecycle.ViewModel
-import com.example.freeqrgenerator.ui.items.ColorSelector
-import com.example.freeqrgenerator.ui.items.QrGenerator
+import com.example.freeqrgenerator.error.FreeQrError
+import com.example.freeqrgenerator.generator.QRGenerator
+import com.example.freeqrgenerator.ui.utils.Constants.ColorSelectorType
+import com.example.freeqrgenerator.ui.utils.Constants.Companion.STRING_EMPTY
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import java.io.File
 import java.io.File.separator
 import java.io.FileOutputStream
@@ -36,175 +33,161 @@ import androidx.compose.ui.geometry.Rect as ComposeRect
 
 
 class MainActivityViewModel: ViewModel() {
-    private val _uiState = MutableStateFlow(MainState())
-    val uiState: StateFlow<MainState> = _uiState.asStateFlow()
+    private val _url = MutableStateFlow(STRING_EMPTY)
+    val url = _url.asStateFlow()
+
+    private val _qrGenerated: MutableStateFlow<Drawable?> = MutableStateFlow(null)
+    val qrGenerated = _qrGenerated.asStateFlow()
+
+    private val _bitmapGenerated: MutableStateFlow<Bitmap?> = MutableStateFlow(null)
+    val bitmapGenerated = _bitmapGenerated.asStateFlow()
+
+    private val _shouldShowColorPicker = MutableStateFlow(false)
+    val shouldShowColorPicker = _shouldShowColorPicker.asStateFlow()
+
+    private val _foregroundColor = MutableStateFlow(Color.Black)
+    val foregroundColor = _foregroundColor.asStateFlow()
+
+    private val _backgroundColor = MutableStateFlow(Color.White)
+    val backgroundColor = _backgroundColor.asStateFlow()
+
+    private val _selectorMode = MutableStateFlow(ColorSelectorType.NONE)
+    val selectorMode = _selectorMode.asStateFlow()
+
+    private val _error = MutableStateFlow(FreeQrError.NONE)
+    val error = _error.asStateFlow()
+
+    private val _qrBounds: MutableStateFlow<ComposeRect?> = MutableStateFlow(null)
+    val qrBounds = _qrBounds.asStateFlow()
+
+    private val _qrWindow: MutableStateFlow<Window?> = MutableStateFlow(null)
+    val qrWindow = _qrWindow.asStateFlow()
 
     private fun generateQr() {
-        _uiState.update {
-            with(uiState.value) {
-                it.copy(
-                    qrGenerated =
-                    QrGenerator().processQr(
-                        foregroundColor,
-                        backgroundColor,
-                        url
-                    )
-                )
-            }
-        }
+        _qrGenerated.value = QRGenerator()
+            .processQr(
+                _foregroundColor.value,
+                _backgroundColor.value,
+                _url.value
+            )
     }
 
     fun updateColorSelected(color: Color) {
-        with(uiState.value) {
-            if (uiState.value.selectorMode == ColorSelector.FOREGROUND) {
-                _uiState.update {
-                    it.copy(foregroundColor = color)
-                }
-            } else if (uiState.value.selectorMode == ColorSelector.BACKGROUND) {
-                _uiState.update {
-                    it.copy(backgroundColor = color)
-                }
+            if (_selectorMode.value == ColorSelectorType.FOREGROUND) {
+                _foregroundColor.value = color
+            } else if (_selectorMode.value == ColorSelectorType.BACKGROUND) {
+                _backgroundColor.value = color
             }
-            if (url.isNotEmpty()) {
-                _uiState.update {
-                    it.copy(error = MainError.NONE)
-                }
+            if (_url.value.isNotEmpty()) {
+                _error.value = FreeQrError.NONE
                 generateQr()
             }
-        }
     }
 
-    fun showColorPicker(selectorMode: ColorSelector) {
-        _uiState.update {
-            it.copy(
-                shouldShowColorPicker = true,
-                selectorMode = selectorMode
-            )
-        }
+    fun showColorPicker(selectorMode: ColorSelectorType) {
+        _shouldShowColorPicker.value = true
+        _selectorMode.value = selectorMode
     }
 
     fun hideColorPicker() {
-        _uiState.update {
-            it.copy(
-                shouldShowColorPicker = false
-            )
-        }
+        _shouldShowColorPicker.value = false
     }
 
     fun generateBitmapFromUri(uri: Uri?, contentResolver: ContentResolver) {
-        _uiState.update {
-            it.copy(
-                bitmap = uri?.let { uri ->
-                    if (Build.VERSION.SDK_INT < 28) {
-                        MediaStore.Images.Media.getBitmap(contentResolver, uri)
-                    } else {
-                        val source = ImageDecoder.createSource(contentResolver, uri)
-                        ImageDecoder.decodeBitmap(source)
-                    }
-                }
-            )
+        _bitmapGenerated.value = uri?.let {
+            if (Build.VERSION.SDK_INT < 28) {
+                MediaStore.Images.Media.getBitmap(contentResolver, it)
+            } else {
+                val source = ImageDecoder.createSource(contentResolver, it)
+                ImageDecoder.decodeBitmap(source)
+            }
         }
     }
 
     fun updateUrl(url: String) {
         if (url.isNotEmpty()) {
-            _uiState.update {
-                it.copy(
-                    url = url,
-                    error = MainError.NONE
-                )
-            }
+            _url.value = url
+            _error.value = FreeQrError.NONE
             generateQr()
         } else {
-            _uiState.update {
-                it.copy(
-                    error = MainError.URL_EMPTY,
-                    qrGenerated = null
-                )
-            }
+            handleEmptyUrlError()
         }
     }
 
-    fun handleEmptyUrlError() {
-        _uiState.update {
-            it.copy(
-                error = MainError.URL_EMPTY
-            )
-        }
+    private fun handleEmptyUrlError() {
+        _error.value = FreeQrError.URL_EMPTY
+        _qrGenerated.value = null
     }
 
     fun setQrViewAndWindow(bounds: ComposeRect?, window: Window) {
-        _uiState.update {
-            it.copy(
-                qrBounds = bounds,
-                qrWindow = window
-            )
-        }
+        _qrBounds.value = bounds
+        _qrWindow.value = window
     }
 
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getBitmapFromView(callback: (Bitmap) -> Unit) {
-        with(uiState.value) {
-            if (qrBounds != null && qrWindow != null) {
+        if (_qrBounds.value != null && _qrWindow.value != null) {
 
-                val bitmap = Bitmap.createBitmap(
-                    qrBounds.width.roundToInt(),
-                    qrBounds.height.roundToInt(),
-                    Bitmap.Config.ARGB_8888
-                )
+            val bitmap = Bitmap.createBitmap(
+                _qrBounds.value!!.width.roundToInt(),
+                _qrBounds.value!!.height.roundToInt(),
+                Bitmap.Config.ARGB_8888
+            )
 
-                val rect = Rect(
-                    qrBounds.left.roundToInt(),
-                    qrBounds.top.roundToInt(),
-                    qrBounds.right.roundToInt(),
-                    qrBounds.bottom.roundToInt()
-                )
-                PixelCopy.request(
-                    qrWindow,
-                    rect,
-                    bitmap,
-                    {
-                        callback(bitmap)
-                    },
-                    Handler(Looper.getMainLooper())
-                )
-            }
+            val rect = Rect(
+                _qrBounds.value!!.left.roundToInt(),
+                _qrBounds.value!!.top.roundToInt(),
+                _qrBounds.value!!.right.roundToInt(),
+                _qrBounds.value!!.bottom.roundToInt()
+            )
+            PixelCopy.request(
+                _qrWindow.value!!,
+                rect,
+                bitmap,
+                {
+                    callback(bitmap)
+                },
+                Handler(Looper.getMainLooper())
+            )
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun saveImage(context: Context, folderName: String, callback: (String) -> Unit) {
-        getBitmapFromView {
-            if (Build.VERSION.SDK_INT >= 29) {
-                val path = "Pictures/" + folderName
-                val values = contentValues()
-                values.put(MediaStore.Images.Media.RELATIVE_PATH, path)
-                values.put(MediaStore.Images.Media.IS_PENDING, true)
+        if (_url.value.isEmpty()) {
+            handleEmptyUrlError()
+        } else {
+            getBitmapFromView {
+                if (Build.VERSION.SDK_INT >= 29) {
+                    val path = "Pictures/$folderName"
+                    val values = contentValues()
+                    values.put(MediaStore.Images.Media.RELATIVE_PATH, path)
+                    values.put(MediaStore.Images.Media.IS_PENDING, true)
 
-                val uri: Uri? = context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
-                if (uri != null) {
-                    saveImageToStream(it, context.contentResolver.openOutputStream(uri))
-                    values.put(MediaStore.Images.Media.IS_PENDING, false)
-                    context.contentResolver.update(uri, values, null, null)
-                }
-                callback(path)
-            } else {
-                val directory = File(Environment.getExternalStorageDirectory().toString() + separator + folderName)
+                    val uri: Uri? = context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+                    if (uri != null) {
+                        saveImageToStream(it, context.contentResolver.openOutputStream(uri))
+                        values.put(MediaStore.Images.Media.IS_PENDING, false)
+                        context.contentResolver.update(uri, values, null, null)
+                    }
+                    callback(path)
+                } else {
+                    val directory = File(Environment.getExternalStorageDirectory().toString() + separator + folderName)
 
-                if (!directory.exists()) {
-                    directory.mkdirs()
+                    if (!directory.exists()) {
+                        directory.mkdirs()
+                    }
+                    val fileName = System.currentTimeMillis().toString() + ".png"
+                    val file = File(directory, fileName)
+                    saveImageToStream(it, FileOutputStream(file))
+                    val values = contentValues()
+                    values.put(MediaStore.Images.Media.DATA, file.absolutePath)
+                    context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+                    callback(directory.path)
                 }
-                val fileName = System.currentTimeMillis().toString() + ".png"
-                val file = File(directory, fileName)
-                saveImageToStream(it, FileOutputStream(file))
-                val values = contentValues()
-                values.put(MediaStore.Images.Media.DATA, file.absolutePath)
-                context.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
-                callback(directory.path)
             }
         }
-
     }
 
     private fun contentValues() : ContentValues {

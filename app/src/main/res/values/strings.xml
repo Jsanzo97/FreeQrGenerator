@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Free Qr Generator</string>
+
+    <string name="qr_main_color">Foreground</string>
+    <string name="qr_choose_image">Choose Image</string>
+    <string name="qr_background_color">Background</string>
+    <string name="qr_save_image">Save</string>
+    <string name="qr_save_color">Choose color</string>
+    <string name="qr_introduce_url">Enter your url</string>
+
+    <string name="color_picker_close">Close</string>
+
+    <string name="qr_image_content_description">Qr generated</string>
+
 </resources>

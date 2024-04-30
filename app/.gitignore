@@ -1,1 +1,6 @@
 /build
+/release
+../local.properties
+../.idea
+../.gradle
+../keystore.jks
