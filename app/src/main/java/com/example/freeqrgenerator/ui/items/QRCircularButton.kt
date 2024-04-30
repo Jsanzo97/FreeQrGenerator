@@ -63,7 +63,6 @@ fun QRCircularButton(
             color = FreeQrGeneratorTheme.colors.opposite
         )
     }
-
 }
 
 @Preview(showBackground = true, widthDp = 420)
