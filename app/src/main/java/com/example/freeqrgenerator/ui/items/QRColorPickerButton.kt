@@ -27,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.freeqrgenerator.R
+import com.example.freeqrgenerator.ui.theme.FreeQrGeneratorTheme
 import io.mhssn.colorpicker.ColorPicker
 import io.mhssn.colorpicker.ColorPickerType
 
@@ -44,11 +45,16 @@ fun QRColorPickerButton(
     ) {
         Surface(
             modifier = Modifier
+                .fillMaxWidth()
                 .clip(RoundedCornerShape(4.dp)),
+            color = FreeQrGeneratorTheme.colors.background
         ) {
             Column(
                 modifier = Modifier
-                    .padding(24.dp),
+                    .padding(32.dp)
+                    .background(
+                        color = FreeQrGeneratorTheme.colors.background
+                    ),
                 verticalArrangement = Arrangement.spacedBy(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
