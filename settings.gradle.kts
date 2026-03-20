@@ -11,9 +11,12 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven { setUrl("https://jitpack.io") }
+        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     }
 }
 
-rootProject.name = "Free Qr Generator"
-include(":app")
- 
+rootProject.name = "FreeQrGenerator"
+include(":composeApp")
+project(":composeApp").projectDir = file("app")
+include(":androidApp")
+include(":iosApp")
