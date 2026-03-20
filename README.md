@@ -7,104 +7,102 @@
 ![Min SDK](https://img.shields.io/badge/Min%20SDK-23-grey?style=flat&labelColor=green)
 ![License](https://img.shields.io/badge/License-MIT-grey?style=flat&labelColor=yellow)
 
-Aplicación multiplataforma desarrollada con **Kotlin Multiplatform (KMP)** para la generación y personalización de códigos QR. El proyecto utiliza **Compose Multiplatform** para compartir la lógica y la interfaz de usuario entre Android e iOS.
+Multiplatform application developed with **Kotlin Multiplatform (KMP)** for generating and customizing QR codes. The project uses **Compose Multiplatform** to share logic and user interface between Android and iOS.
 
 ---
 
-## 🏛️ Arquitectura
+## 🏛️ Architecture
 
-El proyecto utiliza una arquitectura modular donde la lógica de negocio y la UI se centralizan en el módulo compartido, permitiendo una máxima reutilización de código.
+The project uses a modular architecture where business logic and UI are centralized in the shared module, allowing for maximum code reuse.
 
 ```
-androidApp  → :composeApp (módulo compartido)
-iosApp      → :composeApp (módulo compartido vía framework)
+androidApp  → :composeApp (shared module)
+iosApp      → :composeApp (shared module via framework)
 :composeApp → commonMain (UI, Presentation, Domain, Navigation, DI)
 ```
 
-| Módulo | Responsabilidad |
+| Module | Responsibility |
 |---|---|
-| `:ui` | Componentes visuales comunes, temas y pantallas desarrolladas con Compose Multiplatform. |
-| `:presentation` | Gestión del estado de la UI mediante ViewModels compartidos y flujos reactivos. |
-| `:domain` | Lógica de negocio pura: Casos de uso (UseCases), entidades y definiciones de repositorios. |
-| `:navigation` | Definición de rutas y grafos de navegación utilizando Navigation Compose. |
-| `:di` | Configuración de la inyección de dependencias con Koin para todas las plataformas. |
-| `:data` | (En androidMain/iosMain) Implementaciones específicas de plataforma para persistencia o APIs nativas. |
-| `commonMain` | UI compartida (Compose), ViewModels, Casos de Uso, Navegación e Inyección de Dependencias. |
-| `androidMain` | Implementaciones específicas de Android (ej. Repositorios de imágenes nativos). |
-| `iosMain` | Implementaciones específicas de iOS y puntos de entrada para la app de Apple. |
+| `:ui` | Common visual components, themes, and screens developed with Compose Multiplatform. |
+| `:presentation` | UI state management using shared ViewModels and reactive flows. |
+| `:domain` | Pure business logic: Use Cases, entities, and repository definitions. |
+| `:navigation` | Route definitions and navigation graphs using Navigation Compose. |
+| `:di` | Dependency injection configuration with Koin for all platforms. |
+| `:data` | (In androidMain/iosMain) Platform-specific implementations for persistence or native APIs. |
+| `commonMain` | Shared UI (Compose), ViewModels, Use Cases, Navigation, and Dependency Injection. |
+| `androidMain` | Android-specific implementations (e.g., native image repositories). |
+| `iosMain` | iOS-specific implementations and entry points for the Apple app. |
 
 ---
 
 ## 🛠️ Tech Stack
 
 ### UI & UX
-- **Compose Multiplatform** — Interfaz declarativa compartida.
-- **Navigation Compose** — Navegación nativa en código compartido.
-- **Compottie** — Animaciones Lottie multiplataforma.
-- **ColorPicker Compose** — Selector de color para personalización del QR.
+- **Compose Multiplatform** — Shared declarative interface.
+- **Navigation Compose** — Native navigation in shared code.
+- **Compottie** — Multiplatform Lottie animations.
+- **ColorPicker Compose** — Color picker for QR customization.
 
 ### Core Logic
-- **Qrose (Custom QR Generator)** — Estilización avanzada de QRs.
-- **Koin 4.2.0** — Inyección de dependencias multiplataforma.
-- **Coroutines + Flow** — Gestión de asincronía y estados reactivos.
+- **Qrose (Custom QR Generator)** — Advanced QR styling.
+- **Koin 4.2.0** — Multiplatform dependency injection.
+- **Coroutines + Flow** — Asynchronous management and reactive states.
 
 ---
 
-## ✨ Características
+## ✨ Features
 
-- **Generación Dinámica**: QRs instantáneos desde texto o URL.
-- **Personalización**: Colores, redondeado de esquinas y estilos visuales.
-- **Logos**: Inserción de imágenes personalizadas en el centro del QR.
-- **Guardado Nativo**: Soporte para guardar en galería en Android e iOS.
+- **Dynamic Generation**: Instant QRs from text or URL.
+- **Customization**: Colors, corner rounding, and visual styles.
+- **Logos**: Custom image insertion in the center of the QR.
+- **Native Saving**: Support for saving to gallery on Android and iOS.
 
 ---
 
 ## 🎬 Splash Screen
 
-La aplicación cuenta con una pantalla de inicio animada utilizando **Compottie**, que gestiona la transición inicial hacia la pantalla principal de generación.
+The application features an animated splash screen using **Compottie**, which manages the initial transition to the main generation screen.
 
 ---
 
 ## 🧪 Testing
 
-El proyecto incluye pruebas unitarias en el módulo común:
-- **Kotlin Test** para validaciones de lógica en `commonTest`.
-- Mocks para la verificación de interacción entre componentes.
+The project includes unit tests in the common module:
+- **Kotlin Test** for logic validation in `commonTest`.
+- Mocks for verifying interaction between components.
 
 ```bash
-./gradlew :shared:commonTest  # Ejecutar tests comunes
+./gradlew :shared:commonTest  # Run common tests
 ```
 
 ---
 
 ## 📱 Compose Previews
 
-Se utilizan Previews de Compose para el desarrollo rápido de componentes de UI, permitiendo visualizar cambios de diseño sin necesidad de desplegar en un dispositivo real.
+Compose Previews are used for rapid UI component development, allowing visualization of design changes without needing to deploy to a real device.
 
 ---
 
-## 🚀 Cómo empezar
+## 🚀 Getting Started
 
-1. **Clonar el repositorio**.
-2. **Sincronizar Gradle**: Requiere Android Studio Ladybug+ y JDK 17+.
-3. **Ejecutar Android**: Ejecuta el módulo `androidApp`.
-4. **Ejecutar iOS**: Abre `iosApp/iosApp.xcodeproj` en Xcode o usa el plugin KMP en Android Studio.
+1. **Clone the repository**.
+2. **Sync Gradle**: Requires Android Studio Ladybug+ and JDK 17+.
+3. **Run Android**: Run the `androidApp` module.
+4. **Run iOS**: Open `iosApp/iosApp.xcodeproj` in Xcode or use the KMP plugin in Android Studio.
 
 ---
 
-## 🔍 Detalles de Implementación
+## 🔍 Implementation Details
 
-- **Version Catalog**: Gestión de dependencias en `gradle/libs.versions.toml`.
-- **Resources**: Gestión compartida de recursos (imágenes, strings) mediante el plugin de Compose Resources.
+- **Version Catalog**: Dependency management in `gradle/libs.versions.toml`.
+- **Resources**: Shared resource management (images, strings) using the Compose Resources plugin.
 
-## 👀 Ejemplos
+## 👀 Examples
 
-![iOS - Light Mode](https://github.com/Jsanzo97/FreeQrGenerator/blob/main/screenshots/iOS-lightMode.png)
-![iOS - Dark Mode](https://github.com/Jsanzo97/FreeQrGenerator/blob/main/screenshots/iOS-darkMode.png)
-![Android - Light Mode](https://github.com/Jsanzo97/FreeQrGenerator/blob/main/screenshots/android-lightMode.png)
-![Android - Dark Mode](https://github.com/Jsanzo97/FreeQrGenerator/blob/main/screenshots/android-darkMode.png)
+| iOS Light Mode | iOS Dark Mode | Android Light Mode | Android Dark Mode |
+| :---: | :---: | :---: | :---: |
+| <img src="https://github.com/Jsanzo97/FreeQrGenerator/blob/main/screenshots/iOS-lightMode.png" width="200"> | <img src="https://github.com/Jsanzo97/FreeQrGenerator/blob/main/screenshots/iOS-darkMode.png" width="200"> | <img src="https://github.com/Jsanzo97/FreeQrGenerator/blob/main/screenshots/android-lightMode.png" width="200"> | <img src="https://github.com/Jsanzo97/FreeQrGenerator/blob/main/screenshots/android-darkMode.png" width="200"> |
 
-![Qr - Youtube](https://github.com/Jsanzo97/FreeQrGenerator/blob/main/screenshots/qr-youtube.png)
-![Qr - Spotify](https://github.com/Jsanzo97/FreeQrGenerator/blob/main/screenshots/qr-spotify.png)
-![Qr - Github](https://github.com/Jsanzo97/FreeQrGenerator/blob/main/screenshots/qr-github.png)
-![Qr - X (Classic)](https://github.com/Jsanzo97/FreeQrGenerator/blob/main/screenshots/qr-twitter.png)
+| Qr - Youtube | Qr - Spotify | Qr - Github | Qr - X (Classic) |
+| :---: | :---: | :---: | :---: |
+| <img src="https://github.com/Jsanzo97/FreeQrGenerator/blob/main/screenshots/qr-youtube.png" width="180"> | <img src="https://github.com/Jsanzo97/FreeQrGenerator/blob/main/screenshots/qr-spotify.png" width="180"> | <img src="https://github.com/Jsanzo97/FreeQrGenerator/blob/main/screenshots/qr-github.png" width="180"> | <img src="https://github.com/Jsanzo97/FreeQrGenerator/blob/main/screenshots/qr-twitter.png" width="180"> |
