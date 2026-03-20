@@ -104,8 +104,8 @@ Compose Previews are used for rapid UI component development, allowing visualiza
 
 | iOS Light Mode | iOS Dark Mode | Android Light Mode | Android Dark Mode |
 | :---: | :---: | :---: | :---: |
-| <img src="https://github.com/Jsanzo97/FreeQrGenerator/blob/main/screenshots/iOS-lightMode.png" width="200"> | <img src="https://github.com/Jsanzo97/FreeQrGenerator/blob/main/screenshots/iOS-darkMode.png" width="200"> | <img src="https://github.com/Jsanzo97/FreeQrGenerator/blob/main/screenshots/android-lightMode.png" width="200"> | <img src="https://github.com/Jsanzo97/FreeQrGenerator/blob/main/screenshots/android-darkMode.png" width="200"> |
+| <img src="https://github.com/Jsanzo97/QrGenerator-KMP/blob/main/screenshots/iOS-lightMode.png" width="200"> | <img src="https://github.com/Jsanzo97/QrGenerator-KMP/blob/main/screenshots/iOS-darkMode.png" width="200"> | <img src="https://github.com/Jsanzo97/QrGenerator-KMP/blob/main/screenshots/android-lightMode.png" width="200"> | <img src="https://github.com/Jsanzo97/QrGenerator-KMP/blob/main/screenshots/android-darkMode.png" width="200"> |
 
 | Qr - Youtube | Qr - Spotify | Qr - Github | Qr - X (Classic) |
 | :---: | :---: | :---: | :---: |
-| <img src="https://github.com/Jsanzo97/FreeQrGenerator/blob/main/screenshots/qr-youtube.png" width="180"> | <img src="https://github.com/Jsanzo97/FreeQrGenerator/blob/main/screenshots/qr-spotify.png" width="180"> | <img src="https://github.com/Jsanzo97/FreeQrGenerator/blob/main/screenshots/qr-github.png" width="180"> | <img src="https://github.com/Jsanzo97/FreeQrGenerator/blob/main/screenshots/qr-twitter.png" width="180"> |
+| <img src="https://github.com/Jsanzo97/QrGenerator-KMP/blob/main/screenshots/qr-youtube.png" width="180"> | <img src="https://github.com/Jsanzo97/QrGenerator-KMP/blob/main/screenshots/qr-spotify.png" width="180"> | <img src="https://github.com/Jsanzo97/QrGenerator-KMP/blob/main/screenshots/qr-github.png" width="180"> | <img src="https://github.com/Jsanzo97/QrGenerator-KMP/blob/main/screenshots/qr-twitter.png" width="180"> |
