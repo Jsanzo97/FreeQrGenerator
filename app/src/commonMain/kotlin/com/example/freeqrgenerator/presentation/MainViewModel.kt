@@ -3,15 +3,14 @@ package com.example.freeqrgenerator.presentation
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.freeqrgenerator.domain.repository.ImageRepository
-import com.example.freeqrgenerator.domain.repository.PermissionRepository
+import com.example.freeqrgenerator.domain.usecase.CheckWritePermissionsUseCase
+import com.example.freeqrgenerator.domain.usecase.GenerateQrUseCase
+import com.example.freeqrgenerator.domain.usecase.RequestWritePermissionsUseCase
+import com.example.freeqrgenerator.domain.usecase.SaveImageUseCase
 import com.example.freeqrgenerator.error.FreeQrError
-import com.example.freeqrgenerator.ui.utils.toCircularBitmapPainter
-import io.github.alexzhirkevich.qrose.ImageFormat
-import io.github.alexzhirkevich.qrose.QrCodePainter
-import io.github.alexzhirkevich.qrose.toByteArray
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -32,8 +31,10 @@ interface QrLayoutCallBacks {
 }
 
 class MainViewModel(
-    private val imageRepository: ImageRepository,
-    private val permissionRepository: PermissionRepository
+    private val checkWritePermissionsUseCase: CheckWritePermissionsUseCase,
+    private val requestWritePermissionsUseCase: RequestWritePermissionsUseCase,
+    private val saveImageUseCase: SaveImageUseCase,
+    private val generateQrUseCase: GenerateQrUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MainState())
@@ -41,6 +42,8 @@ class MainViewModel(
 
     private val _snackbarEvents = Channel<Unit>()
     val snackbarEvents = _snackbarEvents.receiveAsFlow()
+
+    val permissionRequests: Flow<Unit> = requestWritePermissionsUseCase.requests
 
     fun updateColorSelected(color: Color) {
         _uiState.update { state ->
@@ -122,33 +125,30 @@ class MainViewModel(
                 _uiState.update { it.copy(isSaving = true) }
 
                 try {
-                    if (!permissionRepository.isWriteStorageGranted()) {
-                        permissionRepository.requestWriteStoragePermission()
+                    if (!checkWritePermissionsUseCase.invoke()) {
+                        requestWritePermissionsUseCase.invoke()
                         _uiState.update { it.copy(isSaving = false) }
                         return@launch
                     }
 
-                    val logoPainter = logoBytes?.toByteArray()?.toCircularBitmapPainter()
-
-                    val painter = QrCodePainter(
-                        data = url,
-                        options = buildQrOptions(
-                            foregroundColor = foregroundColor,
-                            backgroundColor = backgroundColor,
-                            cornersRadius = qrCornersRadius,
-                            logoPainter = logoPainter
-                        )
-                    )
-
-                    val bytes = painter.toByteArray(1024, 1024, ImageFormat.PNG)
-                    imageRepository.saveImage(bytes)
-                        .onSuccess {
-                            _uiState.update { it.copy(isSaving = false) }
-                            _snackbarEvents.send(Unit)
-                        }
-                        .onFailure {
-                            _uiState.update { it.copy(isSaving = false) }
-                        }
+                    generateQrUseCase.invoke(
+                        url = url,
+                        foregroundColor = foregroundColor,
+                        backgroundColor = backgroundColor,
+                        cornersRadius = qrCornersRadius,
+                        logoBytes = logoBytes
+                    ).onSuccess { bytes ->
+                        saveImageUseCase.invoke(bytes)
+                            .onSuccess {
+                                _uiState.update { it.copy(isSaving = false) }
+                                _snackbarEvents.send(Unit)
+                            }
+                            .onFailure {
+                                _uiState.update { it.copy(isSaving = false) }
+                            }
+                    }.onFailure {
+                        _uiState.update { it.copy(isSaving = false) }
+                    }
                 } catch (_: Exception) {
                     _uiState.update { it.copy(isSaving = false) }
                 }

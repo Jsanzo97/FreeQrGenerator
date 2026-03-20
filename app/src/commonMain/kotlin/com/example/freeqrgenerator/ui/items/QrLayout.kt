@@ -47,8 +47,13 @@ import com.example.freeqrgenerator.presentation.MainViewModel
 import com.example.freeqrgenerator.presentation.QrLayoutCallBacks
 import com.example.freeqrgenerator.resources.Res
 import com.example.freeqrgenerator.resources.app_name
+import com.example.freeqrgenerator.resources.common_error
 import com.example.freeqrgenerator.resources.qr_background_color
 import com.example.freeqrgenerator.resources.qr_choose_image
+import com.example.freeqrgenerator.resources.qr_corners
+import com.example.freeqrgenerator.resources.qr_corners_radius
+import com.example.freeqrgenerator.resources.qr_customize
+import com.example.freeqrgenerator.resources.qr_image_saved
 import com.example.freeqrgenerator.resources.qr_main_color
 import com.example.freeqrgenerator.resources.qr_save_image
 import com.example.freeqrgenerator.ui.theme.FreeQrGeneratorTheme
@@ -62,11 +67,12 @@ fun QrLayout(
     val uiState by viewModel.uiState.collectAsState()
 
     val snackbarHostState = remember { SnackbarHostState() }
+    val imageSavedMessage = stringResource(Res.string.qr_image_saved)
 
     LaunchedEffect(Unit) {
         viewModel.snackbarEvents.collect {
             snackbarHostState.showSnackbar(
-                message = "Image saved",
+                message = imageSavedMessage,
                 duration = SnackbarDuration.Short
             )
         }
@@ -254,7 +260,7 @@ fun QrLayoutContent(
 
                 CustomBottomSheet(
                     visible = shouldShowCornersSlider,
-                    title = "Redondeado de esquinas",
+                    title = stringResource(Res.string.qr_corners_radius),
                     onDismiss = { onCornersSliderDismiss() },
                     content = { modifier ->
                         CustomSliderSheetContent(
@@ -301,7 +307,7 @@ private fun QrCustomization(
         modifier = modifier.fillMaxWidth()
     ) {
         Text(
-            text = "Personalizar",
+            text = stringResource(Res.string.qr_customize),
             modifier = Modifier.fillMaxWidth(),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
@@ -332,7 +338,7 @@ private fun QrCustomization(
             )
 
             CustomButton(
-                text = "Esquinas",
+                text = stringResource(Res.string.qr_corners),
                 icon = Icons.Default.RoundedCorner,
                 onClick = { onShowCornersSlider() },
                 isCircular = true

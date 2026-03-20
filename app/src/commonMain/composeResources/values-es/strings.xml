@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Generador Qr</string>
+
+    <string name="qr_main_color">Color principal</string>
+    <string name="qr_choose_image">Elegir imagen</string>
+    <string name="qr_background_color">Color de fondo</string>
+    <string name="qr_save_image">Guardar Qr</string>
+    <string name="qr_choose_color">Elegir color</string>
+    <string name="qr_introduce_url">Introduce tu url</string>
+    <string name="qr_image_saved">Imagen guardada</string>
+    <string name="qr_corners_radius">Radio de esquinas</string>
+    <string name="qr_customize">Personalizar</string>
+    <string name="qr_corners">Esquinas</string>
+
+    <string name="common_close">Cerrar</string>
+    <string name="common_confirm">Confirmar</string>
+    <string name="common_error">Error</string>
+
+    <string name="qr_image_content_description">Qr generado</string>
+</resources>

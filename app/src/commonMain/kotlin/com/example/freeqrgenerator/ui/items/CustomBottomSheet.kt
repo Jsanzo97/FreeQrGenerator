@@ -33,7 +33,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.freeqrgenerator.resources.Res
+import com.example.freeqrgenerator.resources.common_close
 import com.example.freeqrgenerator.ui.theme.FreeQrGeneratorTheme
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun CustomBottomSheet(
@@ -119,7 +122,7 @@ private fun Header(
         IconButton(onClick = onDismiss) {
             Icon(
                 imageVector = Icons.Default.Close,
-                contentDescription = "Close",
+                contentDescription = stringResource(Res.string.common_close),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }

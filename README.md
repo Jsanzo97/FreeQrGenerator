@@ -1,4 +1,4 @@
-# 📱 Free QR Generator - KMP
+# 📱 QR Generator - KMP
 
 ![Kotlin](https://img.shields.io/badge/Kotlin-2.3.20-grey?style=flat&logo=kotlin&logoColor=white&labelColor=7F52FF)
 ![KMP](https://img.shields.io/badge/KMP-Supported-grey?style=flat&logo=kotlin&logoColor=white&labelColor=7F52FF)
@@ -13,7 +13,7 @@ Multiplatform application developed with **Kotlin Multiplatform (KMP)** for gene
 
 ## 🏛️ Architecture
 
-The project uses a modular architecture where business logic and UI are centralized in the shared module, allowing for maximum code reuse.
+The project uses a clean architecture approach where business logic and UI are centralized in the `:composeApp` module, organized by layers within `commonMain`.
 
 ```
 androidApp  → :composeApp (shared module)
@@ -21,18 +21,17 @@ iosApp      → :composeApp (shared module via framework)
 :composeApp → commonMain (UI, Presentation, Domain, Navigation, DI)
 ```
 
-| Module | Responsibility |
+| Layer (Packages) | Responsibility |
 |---|---|
-| `:ui` | Common visual components, themes, and screens developed with Compose Multiplatform. |
-| `:presentation` | UI state management using shared ViewModels and reactive flows. |
-| `:domain` | Pure business logic: Use Cases, entities, and repository definitions. |
-| `:navigation` | Route definitions and navigation graphs using Navigation Compose. |
-| `:di` | Dependency injection configuration with Koin for all platforms. |
-| `:data` | (In androidMain/iosMain) Platform-specific implementations for persistence or native APIs. |
+| `ui` | Common visual components, themes, and screens developed with Compose Multiplatform. |
+| `presentation` | UI state management using shared ViewModels and reactive flows. |
+| `domain` | Pure business logic: Use Cases, entities, and repository definitions. |
+| `navigation` | Route definitions and navigation graphs using Navigation Compose. |
+| `di` | Dependency injection configuration with Koin for all platforms. |
+| `data` | Platform-specific implementations for persistence or native APIs. |
 | `commonMain` | Shared UI (Compose), ViewModels, Use Cases, Navigation, and Dependency Injection. |
 | `androidMain` | Android-specific implementations (e.g., native image repositories). |
 | `iosMain` | iOS-specific implementations and entry points for the Apple app. |
-
 ---
 
 ## 🛠️ Tech Stack
@@ -67,12 +66,16 @@ The application features an animated splash screen using **Compottie**, which ma
 
 ## 🧪 Testing
 
-The project includes unit tests in the common module:
-- **Kotlin Test** for logic validation in `commonTest`.
-- Mocks for verifying interaction between components.
+The project includes a robust testing suite in the common module using modern KMP libraries:
+- **Kotest Assertions**: Fluent and readable assertions.
+- **Turbine**: Testing for Kotlin Flows.
+- **Mokkery**: Mocking library specifically designed for Kotlin Multiplatform.
+- **Kotlinx Coroutines Test**: Utilities for testing coroutines.
+
+To run the tests for all platforms:
 
 ```bash
-./gradlew :shared:commonTest  # Run common tests
+./gradlew :composeApp:allTests  # Run all tests (Android & iOS)
 ```
 
 ---
