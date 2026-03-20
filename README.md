@@ -1,9 +1,10 @@
 # 📱 QR Generator - KMP
 
 ![Kotlin](https://img.shields.io/badge/Kotlin-2.3.20-grey?style=flat&logo=kotlin&logoColor=white&labelColor=7F52FF)
-![KMP](https://img.shields.io/badge/KMP-Supported-grey?style=flat&logo=kotlin&logoColor=white&labelColor=7F52FF)
-![Android](https://img.shields.io/badge/Android-SDK%2036-grey?style=flat&logo=android&logoColor=white&labelColor=green)
+![Android](https://img.shields.io/badge/Android-Supported-grey?style=flat&logo=android&logoColor=white&labelColor=green)
+![iOS](https://img.shields.io/badge/iOS-Supported-grey?style=flat&logo=apple&logoColor=white&labelColor=000000)
 ![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-1.10.2-grey?style=flat&logo=jetpackcompose&logoColor=white&labelColor=blue)
+![Testing](https://img.shields.io/badge/Testing-Kotest%20%2F%20Mokkery-grey?style=flat&logo=junit5&logoColor=white&labelColor=orange)
 ![Min SDK](https://img.shields.io/badge/Min%20SDK-23-grey?style=flat&labelColor=green)
 ![License](https://img.shields.io/badge/License-MIT-grey?style=flat&labelColor=yellow)
 
