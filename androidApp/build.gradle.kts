@@ -7,6 +7,12 @@ plugins {
     alias(libs.plugins.kotlin.compose)
 }
 
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_17)
+    }
+}
+
 extensions.configure<ApplicationExtension>("android") {
     namespace = "com.example.freeqrgenerator.android"
     compileSdk = 36
