@@ -5,8 +5,8 @@ coreKtx = "1.18.0"
 lifecycleRuntimeKtx = "2.10.0"
 activityCompose = "1.13.0"
 composeBom = "2026.03.00"
-composePlugin = "1.10.2"
-composeMultiplatform = "1.10.2"
+composePlugin = "1.10.3"
+composeMultiplatform = "1.10.3"
 composeMaterial3Multiplatform = "1.9.0"
 composeMaterialIconsExtendedMultiplatform = "1.7.3"
 material3 = "1.4.0"
@@ -24,6 +24,9 @@ turbine = "1.2.1"
 kotest = "6.1.7"
 mokkery = "3.3.0"
 coroutines-test = "1.10.2"
+robolectric = "4.16.1"
+mockk = "1.14.9"
+roborazzi = "1.59.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -61,6 +64,12 @@ compose-colorpicker = { module = "com.github.skydoves:colorpicker-compose", vers
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 kotest-assertions = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines-test" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
+roborazzi-core = { module = "io.github.takahirom.roborazzi:roborazzi", version.ref = "roborazzi" }
+roborazzi-compose = { module = "io.github.takahirom.roborazzi:roborazzi-compose", version.ref = "roborazzi" }
+roborazzi-junit = { module = "io.github.takahirom.roborazzi:roborazzi-junit-rule", version.ref = "roborazzi" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -70,3 +79,4 @@ kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref 
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "composePlugin" }
 mokkery = { id = "dev.mokkery", version.ref = "mokkery" }
+roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
