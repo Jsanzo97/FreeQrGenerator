@@ -1,9 +1,10 @@
-# 📱 Free QR Generator - KMP
+# 📱 QR Generator - KMP
 
 ![Kotlin](https://img.shields.io/badge/Kotlin-2.3.20-grey?style=flat&logo=kotlin&logoColor=white&labelColor=7F52FF)
-![KMP](https://img.shields.io/badge/KMP-Supported-grey?style=flat&logo=kotlin&logoColor=white&labelColor=7F52FF)
-![Android](https://img.shields.io/badge/Android-SDK%2036-grey?style=flat&logo=android&logoColor=white&labelColor=green)
+![Android](https://img.shields.io/badge/Android-Supported-grey?style=flat&logo=android&logoColor=white&labelColor=green)
+![iOS](https://img.shields.io/badge/iOS-Supported-grey?style=flat&logo=apple&logoColor=white&labelColor=000000)
 ![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-1.10.2-grey?style=flat&logo=jetpackcompose&logoColor=white&labelColor=blue)
+![Testing](https://img.shields.io/badge/Testing-Kotest%20%2F%20Mokkery-grey?style=flat&logo=junit5&logoColor=white&labelColor=orange)
 ![Min SDK](https://img.shields.io/badge/Min%20SDK-23-grey?style=flat&labelColor=green)
 ![License](https://img.shields.io/badge/License-MIT-grey?style=flat&labelColor=yellow)
 
@@ -13,7 +14,7 @@ Multiplatform application developed with **Kotlin Multiplatform (KMP)** for gene
 
 ## 🏛️ Architecture
 
-The project uses a modular architecture where business logic and UI are centralized in the shared module, allowing for maximum code reuse.
+The project uses a clean architecture approach where business logic and UI are centralized in the `:composeApp` module, organized by layers within `commonMain`.
 
 ```
 androidApp  → :composeApp (shared module)
@@ -21,18 +22,17 @@ iosApp      → :composeApp (shared module via framework)
 :composeApp → commonMain (UI, Presentation, Domain, Navigation, DI)
 ```
 
-| Module | Responsibility |
+| Layer (Packages) | Responsibility |
 |---|---|
-| `:ui` | Common visual components, themes, and screens developed with Compose Multiplatform. |
-| `:presentation` | UI state management using shared ViewModels and reactive flows. |
-| `:domain` | Pure business logic: Use Cases, entities, and repository definitions. |
-| `:navigation` | Route definitions and navigation graphs using Navigation Compose. |
-| `:di` | Dependency injection configuration with Koin for all platforms. |
-| `:data` | (In androidMain/iosMain) Platform-specific implementations for persistence or native APIs. |
+| `ui` | Common visual components, themes, and screens developed with Compose Multiplatform. |
+| `presentation` | UI state management using shared ViewModels and reactive flows. |
+| `domain` | Pure business logic: Use Cases, entities, and repository definitions. |
+| `navigation` | Route definitions and navigation graphs using Navigation Compose. |
+| `di` | Dependency injection configuration with Koin for all platforms. |
+| `data` | Platform-specific implementations for persistence or native APIs. |
 | `commonMain` | Shared UI (Compose), ViewModels, Use Cases, Navigation, and Dependency Injection. |
 | `androidMain` | Android-specific implementations (e.g., native image repositories). |
 | `iosMain` | iOS-specific implementations and entry points for the Apple app. |
-
 ---
 
 ## 🛠️ Tech Stack
@@ -67,12 +67,16 @@ The application features an animated splash screen using **Compottie**, which ma
 
 ## 🧪 Testing
 
-The project includes unit tests in the common module:
-- **Kotlin Test** for logic validation in `commonTest`.
-- Mocks for verifying interaction between components.
+The project includes a robust testing suite in the common module using modern KMP libraries:
+- **Kotest Assertions**: Fluent and readable assertions.
+- **Turbine**: Testing for Kotlin Flows.
+- **Mokkery**: Mocking library specifically designed for Kotlin Multiplatform.
+- **Kotlinx Coroutines Test**: Utilities for testing coroutines.
+
+To run the tests for all platforms:
 
 ```bash
-./gradlew :shared:commonTest  # Run common tests
+./gradlew :composeApp:allTests  # Run all tests (Android & iOS)
 ```
 
 ---
@@ -101,8 +105,8 @@ Compose Previews are used for rapid UI component development, allowing visualiza
 
 | iOS Light Mode | iOS Dark Mode | Android Light Mode | Android Dark Mode |
 | :---: | :---: | :---: | :---: |
-| <img src="https://github.com/Jsanzo97/FreeQrGenerator/blob/main/screenshots/iOS-lightMode.png" width="200"> | <img src="https://github.com/Jsanzo97/FreeQrGenerator/blob/main/screenshots/iOS-darkMode.png" width="200"> | <img src="https://github.com/Jsanzo97/FreeQrGenerator/blob/main/screenshots/android-lightMode.png" width="200"> | <img src="https://github.com/Jsanzo97/FreeQrGenerator/blob/main/screenshots/android-darkMode.png" width="200"> |
+| <img src="https://github.com/Jsanzo97/QrGenerator-KMP/blob/main/screenshots/iOS-lightMode.png" width="200"> | <img src="https://github.com/Jsanzo97/QrGenerator-KMP/blob/main/screenshots/iOS-darkMode.png" width="200"> | <img src="https://github.com/Jsanzo97/QrGenerator-KMP/blob/main/screenshots/android-lightMode.png" width="200"> | <img src="https://github.com/Jsanzo97/QrGenerator-KMP/blob/main/screenshots/android-darkMode.png" width="200"> |
 
 | Qr - Youtube | Qr - Spotify | Qr - Github | Qr - X (Classic) |
 | :---: | :---: | :---: | :---: |
-| <img src="https://github.com/Jsanzo97/FreeQrGenerator/blob/main/screenshots/qr-youtube.png" width="180"> | <img src="https://github.com/Jsanzo97/FreeQrGenerator/blob/main/screenshots/qr-spotify.png" width="180"> | <img src="https://github.com/Jsanzo97/FreeQrGenerator/blob/main/screenshots/qr-github.png" width="180"> | <img src="https://github.com/Jsanzo97/FreeQrGenerator/blob/main/screenshots/qr-twitter.png" width="180"> |
+| <img src="https://github.com/Jsanzo97/QrGenerator-KMP/blob/main/screenshots/qr-youtube.png" width="180"> | <img src="https://github.com/Jsanzo97/QrGenerator-KMP/blob/main/screenshots/qr-spotify.png" width="180"> | <img src="https://github.com/Jsanzo97/QrGenerator-KMP/blob/main/screenshots/qr-github.png" width="180"> | <img src="https://github.com/Jsanzo97/QrGenerator-KMP/blob/main/screenshots/qr-twitter.png" width="180"> |

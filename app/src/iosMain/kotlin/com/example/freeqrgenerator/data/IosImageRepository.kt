@@ -4,14 +4,12 @@ import com.example.freeqrgenerator.domain.repository.ImageRepository
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.addressOf
 import kotlinx.cinterop.usePinned
+import kotlinx.coroutines.suspendCancellableCoroutine
 import platform.Foundation.NSData
 import platform.Foundation.dataWithBytes
-import platform.Photos.PHPhotoLibrary
 import platform.UIKit.UIImage
 import platform.UIKit.UIImageWriteToSavedPhotosAlbum
 import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
 class IosImageRepository : ImageRepository {
 
@@ -24,7 +22,7 @@ class IosImageRepository : ImageRepository {
 
             val uiImage = UIImage(data = nsData)
 
-            suspendCoroutine { continuation ->
+            suspendCancellableCoroutine { continuation ->
                 UIImageWriteToSavedPhotosAlbum(
                     image = uiImage,
                     completionTarget = null,

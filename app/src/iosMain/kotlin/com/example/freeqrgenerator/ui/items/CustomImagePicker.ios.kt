@@ -19,6 +19,7 @@ import platform.UIKit.UIImagePickerControllerOriginalImage
 import platform.UIKit.UIImagePickerControllerSourceType
 import platform.UIKit.UINavigationControllerDelegateProtocol
 import platform.darwin.NSObject
+import platform.posix.memcpy
 
 @OptIn(ExperimentalForeignApi::class)
 @Composable
@@ -45,7 +46,7 @@ actual fun CustomImagePicker(
                     nsData?.let { data ->
                         val bytes = ByteArray(data.length.toInt())
                         bytes.usePinned { pinned ->
-                            platform.posix.memcpy(
+                            memcpy(
                                 pinned.addressOf(0),
                                 data.bytes,
                                 data.length
