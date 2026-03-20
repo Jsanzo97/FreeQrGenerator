@@ -28,9 +28,12 @@ class AndroidPermissionRepository(
         }
     }
 
-    override suspend fun requestWriteStoragePermission() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+    override suspend fun requestWriteStoragePermission(): Result<Unit> {
+        return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             _permissionRequests.emit(Unit)
+            Result.success(Unit)
+        } else {
+            Result.success(Unit)
         }
     }
 }

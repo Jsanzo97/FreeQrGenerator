@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 interface PermissionRepository {
     val permissionRequests: Flow<Unit>
     fun isWriteStorageGranted(): Boolean
-    suspend fun requestWriteStoragePermission()
+    suspend fun requestWriteStoragePermission(): Result<Unit>
 }

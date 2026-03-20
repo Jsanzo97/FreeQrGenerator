@@ -22,6 +22,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.freeqrgenerator.error.FreeQrError
 import com.example.freeqrgenerator.resources.Res
+import com.example.freeqrgenerator.resources.common_error
 import com.example.freeqrgenerator.resources.qr_introduce_url
 import com.example.freeqrgenerator.ui.theme.FreeQrGeneratorTheme
 import org.jetbrains.compose.resources.stringResource
@@ -65,7 +66,7 @@ fun UrlInput(
             if (error == FreeQrError.URL_EMPTY) {
                 Icon(
                     imageVector = Icons.Filled.Info,
-                    contentDescription = "error",
+                    contentDescription = stringResource(Res.string.common_error),
                     tint = MaterialTheme.colorScheme.error
                 )
             }

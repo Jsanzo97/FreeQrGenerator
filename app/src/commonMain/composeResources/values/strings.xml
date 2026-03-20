@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Free Qr Generator</string>
+    <string name="app_name">Qr Generator</string>
 
     <string name="qr_main_color">Main color</string>
     <string name="qr_choose_image">Choose Image</string>
@@ -7,8 +7,14 @@
     <string name="qr_save_image">Save Qr</string>
     <string name="qr_choose_color">Choose color</string>
     <string name="qr_introduce_url">Introduce your url</string>
+    <string name="qr_image_saved">Image saved</string>
+    <string name="qr_corners_radius">Corners radius</string>
+    <string name="qr_customize">Customize</string>
+    <string name="qr_corners">Corners</string>
 
-    <string name="color_picker_close">Close</string>
+    <string name="common_close">Close</string>
+    <string name="common_confirm">Confirm</string>
+    <string name="common_error">Error</string>
 
     <string name="qr_image_content_description">Qr generated</string>
 </resources>
