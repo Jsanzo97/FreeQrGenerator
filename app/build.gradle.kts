@@ -101,10 +101,6 @@ kotlin {
 }
 
 dependencies {
-    implementation(libs.detekt.gradle.plugin)
-    implementation(libs.detekt.rules.compose)
-    implementation(libs.spotless.gradle.plugin)
-
     detektPlugins(libs.detekt.rules.compose)
 }
 
@@ -158,7 +154,7 @@ extensions.configure<LibraryExtension>("android") {
     compileSdk = 36
 
     defaultConfig {
-        minSdk = 23
+        minSdk = 26
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
