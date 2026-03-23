@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.freeqrgenerator.ui.theme.FreeQrGeneratorTheme
 
+@Suppress("LongMethod")
 @Composable
 fun CustomButton(
     text: String = "",
@@ -42,30 +43,30 @@ fun CustomButton(
     if (isCircular) {
         Column(
             modifier = modifier,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Button(
                 onClick = onClick,
                 modifier = Modifier
                     .defaultMinSize(
                         minWidth = 48.dp,
-                        minHeight = 48.dp
+                        minHeight = 48.dp,
                     ),
                 shape = CircleShape,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = containerColor
+                    containerColor = containerColor,
                 ),
                 border = BorderStroke(
                     width = 1.dp,
-                    color = borderColor ?: containerColor
+                    color = borderColor ?: containerColor,
                 ),
-                contentPadding = PaddingValues(8.dp)
+                contentPadding = PaddingValues(8.dp),
             ) {
                 icon?.let {
                     Icon(
                         imageVector = it,
                         contentDescription = null,
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(24.dp),
                     )
                 }
             }
@@ -76,7 +77,7 @@ fun CustomButton(
                     style = MaterialTheme.typography.labelSmall,
                     textAlign = TextAlign.Center,
                     maxLines = 2,
-                    minLines = 2
+                    minLines = 2,
                 )
             }
         }
@@ -86,13 +87,13 @@ fun CustomButton(
             modifier = modifier,
             shape = RoundedCornerShape(8.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = containerColor
+                containerColor = containerColor,
             ),
             border = BorderStroke(
                 width = 1.dp,
-                color = borderColor ?: containerColor
+                color = borderColor ?: containerColor,
             ),
-            contentPadding = PaddingValues(8.dp)
+            contentPadding = PaddingValues(8.dp),
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -106,7 +107,7 @@ fun CustomButton(
                     Spacer(modifier = Modifier.width(8.dp))
                 }
                 Text(
-                    text = text
+                    text = text,
                 )
             }
         }
@@ -115,12 +116,12 @@ fun CustomButton(
 
 @Preview
 @Composable
-fun CustomNormalButtonPreview() {
+private fun CustomNormalButtonPreview() {
     FreeQrGeneratorTheme {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             CustomButton(
                 text = "Boton Normal",
-                onClick = {}
+                onClick = {},
             )
         }
     }
@@ -128,13 +129,13 @@ fun CustomNormalButtonPreview() {
 
 @Preview
 @Composable
-fun CustomNormalIconButtonPreview() {
+private fun CustomNormalIconButtonPreview() {
     FreeQrGeneratorTheme {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             CustomButton(
                 text = "Boton con Icono",
                 icon = Icons.Default.Add,
-                onClick = {}
+                onClick = {},
             )
         }
     }
@@ -142,14 +143,14 @@ fun CustomNormalIconButtonPreview() {
 
 @Preview
 @Composable
-fun CustomCircularButtonPreview() {
+private fun CustomCircularButtonPreview() {
     FreeQrGeneratorTheme {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             CustomButton(
                 text = "Circular",
                 icon = Icons.Default.Add,
                 isCircular = true,
-                onClick = {}
+                onClick = {},
             )
         }
     }

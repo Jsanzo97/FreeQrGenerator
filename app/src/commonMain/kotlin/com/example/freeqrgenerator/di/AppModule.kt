@@ -12,16 +12,15 @@ import com.example.freeqrgenerator.domain.usecase.SaveImageUseCase
 import com.example.freeqrgenerator.domain.usecase.SaveImageUseCaseImpl
 import com.example.freeqrgenerator.presentation.MainViewModel
 import org.koin.core.module.Module
-import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
 val commonModule = module {
     single<QrRepository> { QrRepositoryImpl() }
     single<CheckWritePermissionsUseCase> { CheckWritePermissionsUseCaseImpl(get()) }
-    single<RequestWritePermissionsUseCase> { RequestWritePermissionsUseCaseImpl( get()) }
-    single<SaveImageUseCase> { SaveImageUseCaseImpl( get()) }
-    single<GenerateQrUseCase> { GenerateQrUseCaseImpl( get()) }
+    single<RequestWritePermissionsUseCase> { RequestWritePermissionsUseCaseImpl(get()) }
+    single<SaveImageUseCase> { SaveImageUseCaseImpl(get()) }
+    single<GenerateQrUseCase> { GenerateQrUseCaseImpl(get()) }
     viewModelOf(::MainViewModel)
 }
 

@@ -18,7 +18,7 @@ fun buildQrOptions(
     foregroundColor: Color,
     backgroundColor: Color,
     cornersRadius: Float,
-    logoPainter: Painter? = null
+    logoPainter: Painter? = null,
 ) = QrOptions {
     scale = 0.9f
     background {

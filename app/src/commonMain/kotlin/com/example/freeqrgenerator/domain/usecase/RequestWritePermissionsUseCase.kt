@@ -9,8 +9,8 @@ interface RequestWritePermissionsUseCase {
 }
 
 class RequestWritePermissionsUseCaseImpl(
-    private val permissionRepository: PermissionRepository
-): RequestWritePermissionsUseCase {
+    private val permissionRepository: PermissionRepository,
+) : RequestWritePermissionsUseCase {
 
     override val requests: Flow<Unit> = permissionRepository.permissionRequests
 

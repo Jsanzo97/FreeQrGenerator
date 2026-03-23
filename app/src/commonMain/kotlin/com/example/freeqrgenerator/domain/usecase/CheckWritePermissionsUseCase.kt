@@ -7,10 +7,8 @@ interface CheckWritePermissionsUseCase {
 }
 
 class CheckWritePermissionsUseCaseImpl(
-    val permissionRepository: PermissionRepository
-): CheckWritePermissionsUseCase {
+    val permissionRepository: PermissionRepository,
+) : CheckWritePermissionsUseCase {
 
     override operator fun invoke() = permissionRepository.isWriteStorageGranted()
-
 }
-

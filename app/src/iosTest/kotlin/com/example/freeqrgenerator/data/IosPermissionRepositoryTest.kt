@@ -13,7 +13,7 @@ class IosPermissionRepositoryTest {
     @Test
     fun `Given status is Authorized When isWriteStorageGranted is called Then returns true`() {
         val repository = IosPermissionRepository(
-            getAuthorizationStatus = { PHAuthorizationStatusAuthorized }
+            getAuthorizationStatus = { PHAuthorizationStatusAuthorized },
         )
 
         repository.isWriteStorageGranted() shouldBe true
@@ -22,7 +22,7 @@ class IosPermissionRepositoryTest {
     @Test
     fun `Given status is Limited When isWriteStorageGranted is called Then returns true`() {
         val repository = IosPermissionRepository(
-            getAuthorizationStatus = { PHAuthorizationStatusLimited }
+            getAuthorizationStatus = { PHAuthorizationStatusLimited },
         )
 
         repository.isWriteStorageGranted() shouldBe true
@@ -31,7 +31,7 @@ class IosPermissionRepositoryTest {
     @Test
     fun `Given status is Denied When isWriteStorageGranted is called Then returns false`() {
         val repository = IosPermissionRepository(
-            getAuthorizationStatus = { PHAuthorizationStatusDenied }
+            getAuthorizationStatus = { PHAuthorizationStatusDenied },
         )
 
         repository.isWriteStorageGranted() shouldBe false
@@ -40,7 +40,7 @@ class IosPermissionRepositoryTest {
     @Test
     fun `Given status is NotDetermined When isWriteStorageGranted is called Then returns false`() {
         val repository = IosPermissionRepository(
-            getAuthorizationStatus = { PHAuthorizationStatusNotDetermined }
+            getAuthorizationStatus = { PHAuthorizationStatusNotDetermined },
         )
 
         repository.isWriteStorageGranted() shouldBe false
@@ -50,7 +50,7 @@ class IosPermissionRepositoryTest {
     fun `Given authorization returns Authorized When requestWriteStoragePermission is called Then returns success`() = runTest {
         val repository = IosPermissionRepository(
             getAuthorizationStatus = { PHAuthorizationStatusAuthorized },
-            requestAuthorization = { callback -> callback(PHAuthorizationStatusAuthorized) }
+            requestAuthorization = { callback -> callback(PHAuthorizationStatusAuthorized) },
         )
 
         val result = repository.requestWriteStoragePermission()
@@ -62,7 +62,7 @@ class IosPermissionRepositoryTest {
     fun `Given authorization returns Limited When requestWriteStoragePermission is called Then returns success`() = runTest {
         val repository = IosPermissionRepository(
             getAuthorizationStatus = { PHAuthorizationStatusLimited },
-            requestAuthorization = { callback -> callback(PHAuthorizationStatusLimited) }
+            requestAuthorization = { callback -> callback(PHAuthorizationStatusLimited) },
         )
 
         val result = repository.requestWriteStoragePermission()
@@ -74,7 +74,7 @@ class IosPermissionRepositoryTest {
     fun `Given authorization returns Denied When requestWriteStoragePermission is called Then returns failure`() = runTest {
         val repository = IosPermissionRepository(
             getAuthorizationStatus = { PHAuthorizationStatusDenied },
-            requestAuthorization = { callback -> callback(PHAuthorizationStatusDenied) }
+            requestAuthorization = { callback -> callback(PHAuthorizationStatusDenied) },
         )
 
         val result = repository.requestWriteStoragePermission()
@@ -86,7 +86,7 @@ class IosPermissionRepositoryTest {
     fun `Given authorization returns NotDetermined When requestWriteStoragePermission is called Then returns failure`() = runTest {
         val repository = IosPermissionRepository(
             getAuthorizationStatus = { PHAuthorizationStatusNotDetermined },
-            requestAuthorization = { callback -> callback(PHAuthorizationStatusNotDetermined) }
+            requestAuthorization = { callback -> callback(PHAuthorizationStatusNotDetermined) },
         )
 
         val result = repository.requestWriteStoragePermission()

@@ -12,7 +12,7 @@ import com.example.freeqrgenerator.domain.repository.ImageRepository
 
 class AndroidImageRepository(
     private val context: Context,
-    private val contentResolver: ContentResolver = context.contentResolver
+    private val contentResolver: ContentResolver = context.contentResolver,
 ) : ImageRepository {
 
     override suspend fun saveImage(image: ByteArray): Result<Unit> {
@@ -30,7 +30,7 @@ class AndroidImageRepository(
 
             val uri: Uri? = contentResolver.insert(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                contentValues
+                contentValues,
             )
 
             if (uri != null) {
@@ -46,7 +46,6 @@ class AndroidImageRepository(
             } else {
                 return Result.failure(Exception("Failed to insert image"))
             }
-
         } catch (_: Exception) {
             Result.failure(Exception("Failed to generate QR code image"))
         }

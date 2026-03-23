@@ -14,8 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import com.example.freeqrgenerator.navigation.Screen
 import com.example.freeqrgenerator.resources.Res
 import io.github.alexzhirkevich.compottie.LottieCompositionSpec
 import io.github.alexzhirkevich.compottie.animateLottieCompositionAsState
@@ -26,18 +24,18 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun SplashScreen(
-    onAnimationFinished: () -> Unit
+    onAnimationFinished: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    
     val composition by rememberLottieComposition {
         val json = Res.readBytes("files/splash_logo_animation.json").decodeToString()
         LottieCompositionSpec.JsonString(json)
     }
-    
+
     val logoAnimationState = animateLottieCompositionAsState(
         composition = composition,
         iterations = 1,
-        isPlaying = true
+        isPlaying = true,
     )
 
     LaunchedEffect(logoAnimationState.isAtEnd, composition) {
@@ -47,22 +45,22 @@ fun SplashScreen(
     }
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         composition?.let { comp ->
             Image(
                 painter = rememberLottiePainter(
                     composition = comp,
-                    progress = { logoAnimationState.progress }
+                    progress = { logoAnimationState.progress },
                 ),
                 contentDescription = "Lottie animation",
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(400.dp),
-                contentScale = ContentScale.Fit
+                contentScale = ContentScale.Fit,
             )
         }
     }

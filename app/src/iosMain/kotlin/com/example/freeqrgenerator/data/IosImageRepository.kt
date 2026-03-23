@@ -27,7 +27,7 @@ class IosImageRepository : ImageRepository {
                     image = uiImage,
                     completionTarget = null,
                     completionSelector = null,
-                    contextInfo = null
+                    contextInfo = null,
                 )
                 continuation.resume(Result.success(Unit))
             }

@@ -2,9 +2,12 @@ package com.example.freeqrgenerator.presentation
 
 import androidx.compose.ui.graphics.Color
 import com.example.freeqrgenerator.error.FreeQrError
+import kotlinx.collections.immutable.ImmutableList
 
 enum class ColorSelectorMode {
-    NONE, FOREGROUND, BACKGROUND
+    NONE,
+    FOREGROUND,
+    BACKGROUND,
 }
 
 data class MainState(
@@ -15,7 +18,7 @@ data class MainState(
     val selectorMode: ColorSelectorMode = ColorSelectorMode.NONE,
     val error: FreeQrError = FreeQrError.NONE,
     val isSaving: Boolean = false,
-    val logoBytes: List<Byte>? = null,
+    val logoBytes: ImmutableList<Byte>? = null,
     val qrCornersRadius: Float = 0.2f,
-    val shouldShowCornersSlider: Boolean = false
+    val shouldShowCornersSlider: Boolean = false,
 )

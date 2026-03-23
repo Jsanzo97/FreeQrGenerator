@@ -31,7 +31,7 @@ class AndroidImageRepositoryTest {
 
     private val repository = AndroidImageRepository(
         context = mockContext,
-        contentResolver = mockContentResolver
+        contentResolver = mockContentResolver,
     )
 
     @Test

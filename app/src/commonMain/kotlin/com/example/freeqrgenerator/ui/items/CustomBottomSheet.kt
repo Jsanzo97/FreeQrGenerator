@@ -48,13 +48,13 @@ fun CustomBottomSheet(
 ) {
     Box(
         modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.BottomCenter
+        contentAlignment = Alignment.BottomCenter,
     ) {
         AnimatedVisibility(
             visible = visible,
             enter = fadeIn(),
             exit = fadeOut(),
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
         ) {
             Box(
                 modifier = Modifier
@@ -62,10 +62,10 @@ fun CustomBottomSheet(
                     .background(Color.Black.copy(alpha = 0.5f))
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
-                        indication = null
+                        indication = null,
                     ) {
                         onDismiss()
-                    }
+                    },
             )
         }
 
@@ -77,7 +77,7 @@ fun CustomBottomSheet(
             Surface(
                 shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
                 color = MaterialTheme.colorScheme.surfaceContainerLow,
-                tonalElevation = 1.dp
+                tonalElevation = 1.dp,
             ) {
                 Column {
                     Header(
@@ -85,18 +85,17 @@ fun CustomBottomSheet(
                             .padding(start = 16.dp)
                             .fillMaxWidth(),
                         title = title,
-                        onDismiss = onDismiss
+                        onDismiss = onDismiss,
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
 
                     content(
-                        Modifier.padding(16.dp)
+                        Modifier.padding(16.dp),
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
                 }
-
             }
         }
     }
@@ -111,19 +110,19 @@ private fun Header(
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = title,
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface
+            color = MaterialTheme.colorScheme.onSurface,
         )
         IconButton(onClick = onDismiss) {
             Icon(
                 imageVector = Icons.Default.Close,
                 contentDescription = stringResource(Res.string.common_close),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
     }
@@ -139,7 +138,7 @@ private fun CustomBottomSheetPreview() {
             onDismiss = {},
             content = {
                 Text(text = "Content")
-            }
+            },
         )
     }
 }

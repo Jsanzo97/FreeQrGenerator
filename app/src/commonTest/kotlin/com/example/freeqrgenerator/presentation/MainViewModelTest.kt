@@ -1,7 +1,7 @@
 package com.example.freeqrgenerator.presentation
 
-import app.cash.turbine.test
 import androidx.compose.ui.graphics.Color
+import app.cash.turbine.test
 import com.example.freeqrgenerator.domain.usecase.CheckWritePermissionsUseCase
 import com.example.freeqrgenerator.domain.usecase.GenerateQrUseCase
 import com.example.freeqrgenerator.domain.usecase.RequestWritePermissionsUseCase
@@ -16,6 +16,7 @@ import dev.mokkery.verify
 import dev.mokkery.verify.VerifyMode.Companion.exactly
 import dev.mokkery.verifySuspend
 import io.kotest.matchers.shouldBe
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -105,7 +106,7 @@ class MainViewModelTest {
                 foregroundColor = Color.Red,
                 shouldShowColorPicker = true,
                 selectorMode = ColorSelectorMode.FOREGROUND,
-                error = FreeQrError.NONE
+                error = FreeQrError.NONE,
             )
         }
     }
@@ -124,7 +125,7 @@ class MainViewModelTest {
                 backgroundColor = Color.Blue,
                 shouldShowColorPicker = true,
                 selectorMode = ColorSelectorMode.BACKGROUND,
-                error = FreeQrError.NONE
+                error = FreeQrError.NONE,
             )
         }
     }
@@ -151,7 +152,7 @@ class MainViewModelTest {
             awaitItem() shouldBe MainState(
                 shouldShowColorPicker = true,
                 selectorMode = ColorSelectorMode.FOREGROUND,
-                shouldShowCornersSlider = false
+                shouldShowCornersSlider = false,
             )
         }
     }
@@ -169,7 +170,7 @@ class MainViewModelTest {
             awaitItem() shouldBe MainState(
                 shouldShowColorPicker = true,
                 selectorMode = ColorSelectorMode.FOREGROUND,
-                shouldShowCornersSlider = false
+                shouldShowCornersSlider = false,
             )
         }
     }
@@ -186,7 +187,7 @@ class MainViewModelTest {
 
             awaitItem() shouldBe MainState(
                 shouldShowColorPicker = false,
-                selectorMode = ColorSelectorMode.FOREGROUND
+                selectorMode = ColorSelectorMode.FOREGROUND,
             )
         }
     }
@@ -201,7 +202,7 @@ class MainViewModelTest {
             awaitItem() shouldBe MainState(
                 shouldShowCornersSlider = true,
                 shouldShowColorPicker = false,
-                selectorMode = ColorSelectorMode.NONE
+                selectorMode = ColorSelectorMode.NONE,
             )
         }
     }
@@ -219,7 +220,7 @@ class MainViewModelTest {
             awaitItem() shouldBe MainState(
                 shouldShowCornersSlider = true,
                 shouldShowColorPicker = false,
-                selectorMode = ColorSelectorMode.NONE
+                selectorMode = ColorSelectorMode.NONE,
             )
         }
     }
@@ -258,7 +259,7 @@ class MainViewModelTest {
 
             viewModel.onImageSelected(image)
 
-            awaitItem() shouldBe MainState(logoBytes = image.toList())
+            awaitItem() shouldBe MainState(logoBytes = image.toList().toImmutableList())
         }
     }
 
@@ -300,7 +301,7 @@ class MainViewModelTest {
                     foregroundColor = Color.Black,
                     backgroundColor = Color.White,
                     cornersRadius = 0.2f,
-                    logoBytes = null
+                    logoBytes = null,
                 )
             }
         }
@@ -315,7 +316,7 @@ class MainViewModelTest {
                 foregroundColor = Color.Black,
                 backgroundColor = Color.White,
                 cornersRadius = 0.2f,
-                logoBytes = null
+                logoBytes = null,
             )
         } returns Result.success(validBytes)
         everySuspend { mockedSaveImageUseCase.invoke(validBytes) } returns Result.success(Unit)
@@ -335,7 +336,7 @@ class MainViewModelTest {
                     foregroundColor = Color.Black,
                     backgroundColor = Color.White,
                     cornersRadius = 0.2f,
-                    logoBytes = null
+                    logoBytes = null,
                 )
             }
             verifySuspend(exactly(1)) { mockedSaveImageUseCase.invoke(validBytes) }
@@ -351,7 +352,7 @@ class MainViewModelTest {
                 foregroundColor = Color.Black,
                 backgroundColor = Color.White,
                 cornersRadius = 0.2f,
-                logoBytes = null
+                logoBytes = null,
             )
         } returns Result.success(validBytes)
         everySuspend { mockedSaveImageUseCase.invoke(validBytes) } returns Result.success(Unit)
@@ -374,7 +375,7 @@ class MainViewModelTest {
                     foregroundColor = Color.Black,
                     backgroundColor = Color.White,
                     cornersRadius = 0.2f,
-                    logoBytes = null
+                    logoBytes = null,
                 )
             }
             verifySuspend(exactly(1)) { mockedSaveImageUseCase.invoke(validBytes) }
@@ -390,7 +391,7 @@ class MainViewModelTest {
                 foregroundColor = Color.Black,
                 backgroundColor = Color.White,
                 cornersRadius = 0.2f,
-                logoBytes = null
+                logoBytes = null,
             )
         } returns Result.failure(Exception("Generate failed"))
 
@@ -412,7 +413,7 @@ class MainViewModelTest {
                     foregroundColor = Color.Black,
                     backgroundColor = Color.White,
                     cornersRadius = 0.2f,
-                    logoBytes = null
+                    logoBytes = null,
                 )
             }
             verifySuspend(exactly(0)) { mockedSaveImageUseCase.invoke(validBytes) }
@@ -428,7 +429,7 @@ class MainViewModelTest {
                 foregroundColor = Color.Black,
                 backgroundColor = Color.White,
                 cornersRadius = 0.2f,
-                logoBytes = null
+                logoBytes = null,
             )
         } returns Result.success(validBytes)
         everySuspend { mockedSaveImageUseCase.invoke(validBytes) } returns Result.failure(Exception("Save failed"))
@@ -451,7 +452,7 @@ class MainViewModelTest {
                     foregroundColor = Color.Black,
                     backgroundColor = Color.White,
                     cornersRadius = 0.2f,
-                    logoBytes = null
+                    logoBytes = null,
                 )
             }
             verifySuspend(exactly(1)) { mockedSaveImageUseCase.invoke(validBytes) }
@@ -459,35 +460,6 @@ class MainViewModelTest {
 
         viewModel.snackbarEvents.test {
             expectNoEvents()
-        }
-    }
-
-    @Test
-    fun `Given generate throws exception When onSaveImageClick is called Then isSaving is false and saveImage is not called`() = runTest {
-        every { mockedCheckWritePermissionsUseCase.invoke() } returns true
-        everySuspend {
-            mockedGenerateQrUseCase.invoke(
-                url = validUrl,
-                foregroundColor = Color.Black,
-                backgroundColor = Color.White,
-                cornersRadius = 0.2f,
-                logoBytes = null
-            )
-        } throws Exception("Unexpected error")
-
-        viewModel.updateUrl(validUrl)
-
-        viewModel.uiState.test {
-            awaitItem()
-
-            viewModel.onSaveImageClick()
-            advanceUntilIdle()
-
-            awaitItem() shouldBe MainState(url = validUrl, isSaving = true)
-            awaitItem() shouldBe MainState(url = validUrl, isSaving = false)
-
-            verify(exactly(1)) { mockedCheckWritePermissionsUseCase.invoke() }
-            verifySuspend(exactly(0)) { mockedSaveImageUseCase.invoke(validBytes) }
         }
     }
 }

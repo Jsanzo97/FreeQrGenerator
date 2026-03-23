@@ -34,6 +34,7 @@ import com.github.skydoves.colorpicker.compose.HsvColorPicker
 import com.github.skydoves.colorpicker.compose.rememberColorPickerController
 import org.jetbrains.compose.resources.stringResource
 
+@Suppress("LongMethod")
 @Composable
 fun ColorPickerSheetContent(
     initialColor: Color,
@@ -46,16 +47,16 @@ fun ColorPickerSheetContent(
 
     Column(
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(
             modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth(fraction = 0.7f)
-                    .aspectRatio(1f)
+                    .aspectRatio(1f),
             ) {
                 HsvColorPicker(
                     modifier = Modifier,
@@ -66,7 +67,7 @@ fun ColorPickerSheetContent(
                             selectedColor = it.color
                             onColorSelected(selectedColor)
                         }
-                    }
+                    },
                 )
             }
         }
@@ -87,7 +88,7 @@ fun ColorPickerSheetContent(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .height(IntrinsicSize.Min)
+                .height(IntrinsicSize.Min),
         ) {
             Box(
                 modifier = Modifier
@@ -98,9 +99,9 @@ fun ColorPickerSheetContent(
                     .border(
                         width = 1.dp,
                         color = MaterialTheme.colorScheme.outline,
-                        shape = RoundedCornerShape(8.dp)
+                        shape = RoundedCornerShape(8.dp),
                     )
-                    .background(selectedColor)
+                    .background(selectedColor),
             )
 
             CustomButton(
@@ -121,7 +122,7 @@ private fun ColorPickerSheetContentPreview() {
         ColorPickerSheetContent(
             initialColor = Color.Red,
             onColorSelected = {},
-            onConfirm = {}
+            onConfirm = {},
         )
     }
 }

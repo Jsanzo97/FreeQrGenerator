@@ -48,7 +48,6 @@ import com.example.freeqrgenerator.presentation.MainViewModel
 import com.example.freeqrgenerator.presentation.QrLayoutCallBacks
 import com.example.freeqrgenerator.resources.Res
 import com.example.freeqrgenerator.resources.app_name
-import com.example.freeqrgenerator.resources.common_error
 import com.example.freeqrgenerator.resources.qr_background_color
 import com.example.freeqrgenerator.resources.qr_choose_image
 import com.example.freeqrgenerator.resources.qr_corners
@@ -58,12 +57,14 @@ import com.example.freeqrgenerator.resources.qr_image_saved
 import com.example.freeqrgenerator.resources.qr_main_color
 import com.example.freeqrgenerator.resources.qr_save_image
 import com.example.freeqrgenerator.ui.theme.FreeQrGeneratorTheme
+import kotlinx.collections.immutable.ImmutableList
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun QrLayout(
-    viewModel: MainViewModel = koinViewModel()
+    viewModel: MainViewModel = koinViewModel(),
+    modifier: Modifier = Modifier,
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -74,7 +75,7 @@ fun QrLayout(
         viewModel.snackbarEvents.collect {
             snackbarHostState.showSnackbar(
                 message = imageSavedMessage,
-                duration = SnackbarDuration.Short
+                duration = SnackbarDuration.Short,
             )
         }
     }
@@ -121,7 +122,7 @@ fun QrLayout(
 
     with(uiState) {
         QrLayoutContent(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = modifier.fillMaxWidth(),
             url = url,
             foregroundColor = foregroundColor,
             backgroundColor = backgroundColor,
@@ -138,6 +139,7 @@ fun QrLayout(
     }
 }
 
+@Suppress("LongMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun QrLayoutContent(
@@ -149,7 +151,7 @@ fun QrLayoutContent(
     shouldShowCornersSlider: Boolean,
     isSaving: Boolean,
     qrCornersRadius: Float,
-    logoBytes: List<Byte>?,
+    logoBytes: ImmutableList<Byte>?,
     error: FreeQrError,
     snackbarHostState: SnackbarHostState,
     callBacks: QrLayoutCallBacks,
@@ -177,13 +179,13 @@ fun QrLayoutContent(
                             }
                         },
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Bottom
+                    verticalArrangement = Arrangement.Bottom,
                 ) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .aspectRatio(1f),
-                        contentAlignment = Alignment.Center
+                        contentAlignment = Alignment.Center,
                     ) {
                         QrViewContent(
                             modifier = Modifier
@@ -202,7 +204,7 @@ fun QrLayoutContent(
                     UrlInput(
                         modifier = Modifier.fillMaxWidth(),
                         error = error,
-                        onUrlUpdated = { onUrlUpdated(it) }
+                        onUrlUpdated = { onUrlUpdated(it) },
                     )
 
                     Spacer(modifier = Modifier.height(32.dp))
@@ -212,14 +214,14 @@ fun QrLayoutContent(
                         backgroundColor = backgroundColor,
                         onShowColorPicker = { onShowColorPicker(it) },
                         onShowCornersSlider = { onShowCornersSlider() },
-                        onImageSelected = { onImageSelected(it) }
+                        onImageSelected = { onImageSelected(it) },
                     )
 
                     Spacer(modifier = Modifier.height(32.dp))
 
                     if (isSaving) {
                         CircularProgressIndicator(
-                            modifier = Modifier.padding(bottom = 16.dp)
+                            modifier = Modifier.padding(bottom = 16.dp),
                         )
                     } else {
                         CustomButton(
@@ -230,7 +232,7 @@ fun QrLayoutContent(
                                 .height(56.dp)
                                 .padding(bottom = 16.dp)
                                 .testTag("save_button"),
-                            icon = Icons.Default.Download
+                            icon = Icons.Default.Download,
                         )
                     }
                 }
@@ -256,9 +258,9 @@ fun QrLayoutContent(
                             modifier = modifier,
                             initialColor = colorPickerInitialColor,
                             onColorSelected = { onColorSelected(it) },
-                            onConfirm = { onColorPickerDismiss() }
+                            onConfirm = { onColorPickerDismiss() },
                         )
-                    }
+                    },
                 )
 
                 CustomBottomSheet(
@@ -270,9 +272,9 @@ fun QrLayoutContent(
                             modifier = modifier,
                             qrCornersRadius = qrCornersRadius,
                             onCornersSliderDismiss = { onCornersSliderDismiss() },
-                            onCornersRadiusChanged = { onCornersRadiusChanged(it) }
+                            onCornersRadiusChanged = { onCornersRadiusChanged(it) },
                         )
-                    }
+                    },
                 )
             },
         )
@@ -287,13 +289,13 @@ private fun TopBar() {
             Text(
                 stringResource(Res.string.app_name),
                 fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
+                fontSize = 20.sp,
             )
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.background,
-            titleContentColor = MaterialTheme.colorScheme.primary
-        )
+            titleContentColor = MaterialTheme.colorScheme.primary,
+        ),
     )
 }
 
@@ -307,14 +309,14 @@ private fun QrCustomization(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth(),
     ) {
         Text(
             text = stringResource(Res.string.qr_customize),
             modifier = Modifier.fillMaxWidth(),
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onBackground
+            color = MaterialTheme.colorScheme.onBackground,
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -322,14 +324,14 @@ private fun QrCustomization(
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             CustomButton(
                 text = stringResource(Res.string.qr_main_color),
                 containerColor = foregroundColor,
                 borderColor = MaterialTheme.colorScheme.outline,
                 onClick = { onShowColorPicker(ColorSelectorMode.FOREGROUND) },
-                isCircular = true
+                isCircular = true,
             )
 
             CustomButton(
@@ -337,14 +339,14 @@ private fun QrCustomization(
                 containerColor = backgroundColor,
                 borderColor = MaterialTheme.colorScheme.outline,
                 onClick = { onShowColorPicker(ColorSelectorMode.BACKGROUND) },
-                isCircular = true
+                isCircular = true,
             )
 
             CustomButton(
                 text = stringResource(Res.string.qr_corners),
                 icon = Icons.Default.RoundedCorner,
                 onClick = { onShowCornersSlider() },
-                isCircular = true
+                isCircular = true,
             )
 
             CustomImagePicker(

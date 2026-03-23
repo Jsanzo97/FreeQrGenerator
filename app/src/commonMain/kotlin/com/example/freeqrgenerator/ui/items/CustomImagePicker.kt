@@ -7,5 +7,5 @@ import androidx.compose.ui.Modifier
 expect fun CustomImagePicker(
     onImageSelected: (ByteArray) -> Unit,
     modifier: Modifier = Modifier,
-    text: String
+    text: String,
 )

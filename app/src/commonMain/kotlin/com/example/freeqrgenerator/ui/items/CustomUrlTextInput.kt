@@ -32,7 +32,7 @@ import org.jetbrains.compose.resources.stringResource
 fun UrlInput(
     modifier: Modifier = Modifier,
     error: FreeQrError,
-    onUrlUpdated: (String) -> Unit
+    onUrlUpdated: (String) -> Unit,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
@@ -49,7 +49,7 @@ fun UrlInput(
                 focusManager.clearFocus()
                 keyboardController?.hide()
                 onUrlUpdated(text)
-            }
+            },
         ),
         value = text,
         onValueChange = {
@@ -70,31 +70,31 @@ fun UrlInput(
                 Icon(
                     imageVector = Icons.Filled.Info,
                     contentDescription = stringResource(Res.string.common_error),
-                    tint = MaterialTheme.colorScheme.error
+                    tint = MaterialTheme.colorScheme.error,
                 )
             }
-        }
+        },
     )
 }
 
 @Preview
 @Composable
-fun UrlInputPreview() {
+private fun UrlInputPreview() {
     FreeQrGeneratorTheme {
         UrlInput(
             error = FreeQrError.NONE,
-            onUrlUpdated = {}
+            onUrlUpdated = {},
         )
     }
 }
 
 @Preview
 @Composable
-fun UrlInputErrorPreview() {
+private fun UrlInputErrorPreview() {
     FreeQrGeneratorTheme {
         UrlInput(
             error = FreeQrError.URL_EMPTY,
-            onUrlUpdated = {}
+            onUrlUpdated = {},
         )
     }
 }

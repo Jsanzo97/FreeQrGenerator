@@ -81,12 +81,12 @@ private val AppTypography = Typography(
     headlineMedium = TextStyle(
         fontWeight = FontWeight.Normal,
         fontSize = 28.sp,
-        lineHeight = 36.sp
+        lineHeight = 36.sp,
     ),
     headlineSmall = TextStyle(
         fontWeight = FontWeight.SemiBold,
         fontSize = 24.sp,
-        lineHeight = 32.sp
+        lineHeight = 32.sp,
     ),
     titleLarge = TextStyle(fontWeight = FontWeight.SemiBold, fontSize = 22.sp, lineHeight = 28.sp),
     titleMedium = TextStyle(fontWeight = FontWeight.SemiBold, fontSize = 16.sp, lineHeight = 24.sp),
@@ -102,7 +102,7 @@ private val AppTypography = Typography(
 @Composable
 fun FreeQrGeneratorTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val colorScheme = if (darkTheme) {
         DarkColorScheme

@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 
 class AndroidPermissionRepository(
-    private val context: Context
+    private val context: Context,
 ) : PermissionRepository {
 
     private val _permissionRequests = MutableSharedFlow<Unit>()
@@ -23,7 +23,7 @@ class AndroidPermissionRepository(
         } else {
             ContextCompat.checkSelfPermission(
                 context,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
             ) == PermissionChecker.PERMISSION_GRANTED
         }
     }
