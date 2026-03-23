@@ -26,20 +26,24 @@ import platform.posix.memcpy
 actual fun CustomImagePicker(
     onImageSelected: (ByteArray) -> Unit,
     modifier: Modifier,
-    text: String
+    text: String,
 ) {
     val uiViewController = LocalUIViewController.current
 
     val delegate = remember {
-        object : NSObject(), UIImagePickerControllerDelegateProtocol,
+        object :
+            NSObject(),
+            UIImagePickerControllerDelegateProtocol,
             UINavigationControllerDelegateProtocol {
 
             override fun imagePickerController(
                 picker: UIImagePickerController,
-                didFinishPickingMediaWithInfo: Map<Any?, *>
+                didFinishPickingMediaWithInfo: Map<Any?, *>,
             ) {
-                val image = (didFinishPickingMediaWithInfo[UIImagePickerControllerEditedImage]
-                    ?: didFinishPickingMediaWithInfo[UIImagePickerControllerOriginalImage]) as? UIImage
+                val image = (
+                    didFinishPickingMediaWithInfo[UIImagePickerControllerEditedImage]
+                        ?: didFinishPickingMediaWithInfo[UIImagePickerControllerOriginalImage]
+                    ) as? UIImage
 
                 image?.let {
                     val nsData: NSData? = UIImageJPEGRepresentation(it, 1.0)
@@ -49,7 +53,7 @@ actual fun CustomImagePicker(
                             memcpy(
                                 pinned.addressOf(0),
                                 data.bytes,
-                                data.length
+                                data.length,
                             )
                         }
                         onImageSelected(bytes)
@@ -75,6 +79,6 @@ actual fun CustomImagePicker(
                 this.delegate = delegate
             }
             uiViewController.presentViewController(picker, animated = true, completion = null)
-        }
+        },
     )
 }

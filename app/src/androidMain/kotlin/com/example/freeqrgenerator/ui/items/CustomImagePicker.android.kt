@@ -19,7 +19,7 @@ import java.io.ByteArrayOutputStream
 actual fun CustomImagePicker(
     onImageSelected: (ByteArray) -> Unit,
     modifier: Modifier,
-    text: String
+    text: String,
 ) {
     val context = LocalContext.current
     val contentResolver = context.contentResolver
@@ -32,7 +32,7 @@ actual fun CustomImagePicker(
                 val source = ImageDecoder.createSource(contentResolver, it)
                 ImageDecoder.decodeBitmap(source)
             }
-            
+
             val stream = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
             val byteArray = stream.toByteArray()
@@ -47,7 +47,7 @@ actual fun CustomImagePicker(
         isCircular = true,
         onClick = {
             launcher.launch("image/*")
-        }
+        },
     )
 }
 
@@ -57,7 +57,7 @@ private fun CustomImagePickerPreview() {
     MaterialTheme {
         CustomImagePicker(
             onImageSelected = {},
-            text = "Seleccionar imagen"
+            text = "Seleccionar imagen",
         )
     }
 }

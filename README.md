@@ -5,7 +5,7 @@
 ![iOS](https://img.shields.io/badge/iOS-Supported-grey?style=flat&logo=apple&logoColor=white&labelColor=000000)
 ![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-1.10.2-grey?style=flat&logo=jetpackcompose&logoColor=white&labelColor=blue)
 ![Testing](https://img.shields.io/badge/Testing-Kotest%20%2F%20Mokkery-grey?style=flat&logo=junit5&logoColor=white&labelColor=orange)
-![Android Testing](https://img.shields.io/badge/Android%20Robolectric%20%2B%20Roborazzi-grey?style=flat&logo=android&logoColor=white&labelColor=green)
+![Android Testing](https://img.shields.io/badge/Android-Robolectric%20%2B%20Roborazzi-grey?style=flat&logo=android&logoColor=white&labelColor=green)
 ![Min SDK](https://img.shields.io/badge/Min%20SDK-23-grey?style=flat&labelColor=green)
 ![License](https://img.shields.io/badge/License-MIT-grey?style=flat&labelColor=yellow)
 

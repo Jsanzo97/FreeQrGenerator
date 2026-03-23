@@ -7,9 +7,8 @@ interface SaveImageUseCase {
 }
 
 class SaveImageUseCaseImpl(
-    val imageRepository: ImageRepository
-): SaveImageUseCase {
+    val imageRepository: ImageRepository,
+) : SaveImageUseCase {
 
     override suspend operator fun invoke(image: ByteArray) = imageRepository.saveImage(image)
-
 }

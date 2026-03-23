@@ -22,12 +22,12 @@ fun CustomSliderSheetContent(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
+        modifier = modifier,
     ) {
         Slider(
             value = qrCornersRadius,
             onValueChange = onCornersRadiusChanged,
-            valueRange = 0f..0.5f
+            valueRange = 0f..0.5f,
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -48,7 +48,7 @@ private fun CustomSliderSheetContentPreview() {
         CustomSliderSheetContent(
             qrCornersRadius = 0.5f,
             onCornersSliderDismiss = {},
-            onCornersRadiusChanged = {}
+            onCornersRadiusChanged = {},
         )
     }
 }

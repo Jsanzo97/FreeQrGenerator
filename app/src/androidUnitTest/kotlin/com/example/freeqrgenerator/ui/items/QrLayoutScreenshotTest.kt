@@ -4,11 +4,11 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onRoot
-import com.github.takahirom.roborazzi.captureRoboImage
 import com.example.freeqrgenerator.error.FreeQrError
 import com.example.freeqrgenerator.presentation.ColorSelectorMode
 import com.example.freeqrgenerator.presentation.QrLayoutCallBacks
 import com.example.freeqrgenerator.ui.theme.FreeQrGeneratorTheme
+import com.github.takahirom.roborazzi.captureRoboImage
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -21,7 +21,7 @@ import org.robolectric.annotation.GraphicsMode
 @Config(
     sdk = [33],
     qualifiers = "xxhdpi",
-    manifest = Config.NONE
+    manifest = Config.NONE,
 )
 class QrLayoutScreenshotTest {
 

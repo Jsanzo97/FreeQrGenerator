@@ -21,6 +21,7 @@ import com.example.freeqrgenerator.resources.qr_image_content_description
 import com.example.freeqrgenerator.ui.theme.FreeQrGeneratorTheme
 import com.example.freeqrgenerator.ui.utils.toCircularBitmapPainter
 import io.github.alexzhirkevich.qrose.rememberQrCodePainter
+import kotlinx.collections.immutable.ImmutableList
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -29,7 +30,7 @@ fun QrViewContent(
     foregroundColor: Color,
     backgroundColor: Color,
     qrCornersRadius: Float,
-    logoBytes: List<Byte>?,
+    logoBytes: ImmutableList<Byte>?,
     modifier: Modifier = Modifier,
 ) {
     val logoPainter = remember(logoBytes) {
@@ -41,7 +42,7 @@ fun QrViewContent(
             foregroundColor = foregroundColor,
             backgroundColor = backgroundColor,
             cornersRadius = qrCornersRadius,
-            logoPainter = logoPainter
+            logoPainter = logoPainter,
         )
     }
 
@@ -50,20 +51,20 @@ fun QrViewContent(
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(8.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
     ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .clip(RoundedCornerShape(8.dp)),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             if (url.isNotEmpty()) {
                 Image(
                     painter = qrPainter,
                     contentDescription = stringResource(Res.string.qr_image_content_description),
                     modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Fit
+                    contentScale = ContentScale.Fit,
                 )
             }
         }

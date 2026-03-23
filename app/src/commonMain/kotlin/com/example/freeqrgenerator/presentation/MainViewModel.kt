@@ -8,6 +8,7 @@ import com.example.freeqrgenerator.domain.usecase.GenerateQrUseCase
 import com.example.freeqrgenerator.domain.usecase.RequestWritePermissionsUseCase
 import com.example.freeqrgenerator.domain.usecase.SaveImageUseCase
 import com.example.freeqrgenerator.error.FreeQrError
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -50,12 +51,14 @@ class MainViewModel(
             when (state.selectorMode) {
                 ColorSelectorMode.FOREGROUND -> state.copy(
                     foregroundColor = color,
-                    error = FreeQrError.NONE
+                    error = FreeQrError.NONE,
                 )
+
                 ColorSelectorMode.BACKGROUND -> state.copy(
                     backgroundColor = color,
-                    error = FreeQrError.NONE
+                    error = FreeQrError.NONE,
                 )
+
                 else -> state
             }
         }
@@ -66,7 +69,7 @@ class MainViewModel(
             it.copy(
                 shouldShowColorPicker = true,
                 selectorMode = mode,
-                shouldShowCornersSlider = false
+                shouldShowCornersSlider = false,
             )
         }
     }
@@ -82,7 +85,7 @@ class MainViewModel(
             it.copy(
                 shouldShowCornersSlider = true,
                 shouldShowColorPicker = false,
-                selectorMode = ColorSelectorMode.NONE
+                selectorMode = ColorSelectorMode.NONE,
             )
         }
     }
@@ -103,14 +106,14 @@ class MainViewModel(
         _uiState.update {
             it.copy(
                 url = url,
-                error = if (url.isEmpty()) FreeQrError.URL_EMPTY else FreeQrError.NONE
+                error = if (url.isEmpty()) FreeQrError.URL_EMPTY else FreeQrError.NONE,
             )
         }
     }
 
     fun onImageSelected(image: ByteArray) {
         _uiState.update {
-            it.copy(logoBytes = image.toList())
+            it.copy(logoBytes = image.toList().toImmutableList())
         }
     }
 
@@ -124,19 +127,16 @@ class MainViewModel(
             viewModelScope.launch(Dispatchers.Default) {
                 _uiState.update { it.copy(isSaving = true) }
 
-                try {
-                    if (!checkWritePermissionsUseCase.invoke()) {
-                        requestWritePermissionsUseCase.invoke()
-                        _uiState.update { it.copy(isSaving = false) }
-                        return@launch
-                    }
-
+                if (!checkWritePermissionsUseCase.invoke()) {
+                    requestWritePermissionsUseCase.invoke()
+                    _uiState.update { it.copy(isSaving = false) }
+                } else {
                     generateQrUseCase.invoke(
                         url = url,
                         foregroundColor = foregroundColor,
                         backgroundColor = backgroundColor,
                         cornersRadius = qrCornersRadius,
-                        logoBytes = logoBytes
+                        logoBytes = logoBytes,
                     ).onSuccess { bytes ->
                         saveImageUseCase.invoke(bytes)
                             .onSuccess {
@@ -149,8 +149,6 @@ class MainViewModel(
                     }.onFailure {
                         _uiState.update { it.copy(isSaving = false) }
                     }
-                } catch (_: Exception) {
-                    _uiState.update { it.copy(isSaving = false) }
                 }
             }
         }

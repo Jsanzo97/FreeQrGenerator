@@ -8,6 +8,6 @@ interface QrRepository {
         foregroundColor: Color,
         backgroundColor: Color,
         cornersRadius: Float,
-        logoBytes: List<Byte>?
+        logoBytes: List<Byte>?,
     ): Result<ByteArray>
 }

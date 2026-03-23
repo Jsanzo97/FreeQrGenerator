@@ -36,7 +36,7 @@ class GenerateQrUseCaseTest {
                 foregroundColor = foregroundColor,
                 backgroundColor = backgroundColor,
                 cornersRadius = cornersRadius,
-                logoBytes = null
+                logoBytes = null,
             )
         } returns Result.success(resultBytes)
 
@@ -45,7 +45,7 @@ class GenerateQrUseCaseTest {
             foregroundColor = foregroundColor,
             backgroundColor = backgroundColor,
             cornersRadius = cornersRadius,
-            logoBytes = null
+            logoBytes = null,
         )
 
         result.isSuccess shouldBe true

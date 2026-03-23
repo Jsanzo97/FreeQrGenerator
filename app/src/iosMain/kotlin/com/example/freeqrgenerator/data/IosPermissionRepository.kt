@@ -17,7 +17,7 @@ class IosPermissionRepository(
     },
     private val requestAuthorization: ((PHAuthorizationStatus) -> Unit) -> Unit = { callback ->
         PHPhotoLibrary.requestAuthorizationForAccessLevel(PHAccessLevelAddOnly, callback)
-    }
+    },
 ) : PermissionRepository {
 
     override val permissionRequests: Flow<Unit> = emptyFlow()

@@ -1,5 +1,10 @@
 import com.android.build.api.dsl.LibraryExtension
+import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.extensions.DetektExtension
+import org.gradle.kotlin.dsl.libs
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import com.diffplug.gradle.spotless.SpotlessExtension
+import org.jetbrains.kotlin.gradle.internal.builtins.StandardNames.FqNames.target
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
@@ -8,6 +13,8 @@ plugins {
     alias(libs.plugins.jetbrains.compose)
     alias(libs.plugins.mokkery)
     alias(libs.plugins.roborazzi)
+    alias(libs.plugins.detekt.gradle.plugin)
+    alias(libs.plugins.spotless.gradle.plugin)
 }
 
 kotlin {
@@ -45,6 +52,7 @@ kotlin {
             implementation(libs.compottie)
             implementation(libs.compose.colorpicker)
             implementation(libs.custom.qr.generator)
+            implementation(libs.kotlinx.collections.immutable)
         }
 
         androidMain.dependencies {
@@ -89,6 +97,59 @@ kotlin {
             implementation(libs.turbine)
             implementation(libs.kotest.assertions)
         }
+    }
+}
+
+dependencies {
+    implementation(libs.detekt.gradle.plugin)
+    implementation(libs.detekt.rules.compose)
+    implementation(libs.spotless.gradle.plugin)
+
+    detektPlugins(libs.detekt.rules.compose)
+}
+
+extensions.configure<DetektExtension> {
+    config.setFrom("$rootDir/config/detekt.yml")
+    source.setFrom(fileTree("src") {
+        include("**/*.kt")
+    })
+}
+
+tasks.withType<Detekt>().configureEach {
+    jvmTarget = "17"
+    exclude { it.file.absolutePath.contains("/build/generated") }
+}
+
+tasks.register("detektAll") {
+    group = "verification"
+    dependsOn(subprojects.mapNotNull { it.tasks.findByName("detekt") })
+}
+
+extensions.configure<SpotlessExtension> {
+    kotlin {
+        target("src/*/kotlin/**/*.kt")
+        ktlint(libs.versions.ktlint.get())
+            .editorConfigOverride(
+                mapOf(
+                    "end_of_line" to "native",
+                    "ktlint_standard_filename" to "disabled",
+                    "ktlint_standard_class-naming" to "disabled",
+                    "ktlint_standard_function-naming" to "disabled",
+                    "ktlint_standard_property-naming" to "disabled",
+                    "ktlint_standard_discouraged-comment-location" to "disabled",
+                    "ktlint_standard_no-empty-file" to "disabled",
+                    "ktlint_standard_backing-property-naming" to "disabled",
+                    "ktlint_standard_binary-expression-wrapping" to "disabled",
+                    "ktlint_standard_chain-method-continuation" to "disabled",
+                    "ktlint_standard_class-signature" to "disabled",
+                    "ktlint_standard_condition-wrapping" to "disabled",
+                    "ktlint_standard_function-expression-body" to "disabled",
+                    "ktlint_standard_function-literal" to "disabled",
+                    "ktlint_standard_function-type-modifier-spacing" to "disabled",
+                    "ktlint_standard_multiline-loop" to "disabled",
+                    "ktlint_standard_no-unused-imports" to "enabled",
+                )
+            )
     }
 }
 

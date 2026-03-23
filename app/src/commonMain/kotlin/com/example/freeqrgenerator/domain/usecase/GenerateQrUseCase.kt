@@ -9,26 +9,25 @@ interface GenerateQrUseCase {
         foregroundColor: Color,
         backgroundColor: Color,
         cornersRadius: Float,
-        logoBytes: List<Byte>?
+        logoBytes: List<Byte>?,
     ): Result<ByteArray>
 }
 
 class GenerateQrUseCaseImpl(
-    val qrRepository: QrRepository
-): GenerateQrUseCase {
+    val qrRepository: QrRepository,
+) : GenerateQrUseCase {
 
     override suspend operator fun invoke(
         url: String,
         foregroundColor: Color,
         backgroundColor: Color,
         cornersRadius: Float,
-        logoBytes: List<Byte>?
+        logoBytes: List<Byte>?,
     ) = qrRepository.generate(
         url = url,
         foregroundColor = foregroundColor,
         backgroundColor = backgroundColor,
         cornersRadius = cornersRadius,
-        logoBytes = logoBytes
+        logoBytes = logoBytes,
     )
-
 }

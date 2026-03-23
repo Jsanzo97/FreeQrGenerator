@@ -19,7 +19,7 @@ class QrRepositoryTest {
             foregroundColor = Color.Black,
             backgroundColor = Color.White,
             cornersRadius = 0.2f,
-            logoBytes = null
+            logoBytes = null,
         )
 
         result.isSuccess shouldBe true
@@ -33,7 +33,7 @@ class QrRepositoryTest {
             foregroundColor = Color.Black,
             backgroundColor = Color.White,
             cornersRadius = 0.2f,
-            logoBytes = null
+            logoBytes = null,
         )
 
         result.isSuccess shouldBe true
@@ -46,7 +46,7 @@ class QrRepositoryTest {
             foregroundColor = Color.Black,
             backgroundColor = Color.White,
             cornersRadius = 0.2f,
-            logoBytes = listOf(1, 2)
+            logoBytes = listOf(1, 2),
         )
 
         result.isFailure shouldBe true

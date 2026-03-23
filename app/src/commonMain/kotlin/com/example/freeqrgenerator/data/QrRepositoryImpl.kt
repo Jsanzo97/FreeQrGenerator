@@ -15,7 +15,7 @@ class QrRepositoryImpl : QrRepository {
         foregroundColor: Color,
         backgroundColor: Color,
         cornersRadius: Float,
-        logoBytes: List<Byte>?
+        logoBytes: List<Byte>?,
     ): Result<ByteArray> {
         return try {
             val logoPainter = logoBytes?.toByteArray()?.toCircularBitmapPainter()
@@ -26,8 +26,8 @@ class QrRepositoryImpl : QrRepository {
                     foregroundColor = foregroundColor,
                     backgroundColor = backgroundColor,
                     cornersRadius = cornersRadius,
-                    logoPainter = logoPainter
-                )
+                    logoPainter = logoPainter,
+                ),
             )
 
             Result.success(painter.toByteArray(1024, 1024, ImageFormat.PNG))
