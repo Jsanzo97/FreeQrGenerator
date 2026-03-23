@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -158,7 +159,8 @@ fun QrLayoutContent(
 
     with(callBacks) {
         Scaffold(
-            modifier = modifier,
+            modifier = modifier
+                .testTag("main_screen"),
             topBar = { TopBar() },
             snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
             content = { innerPadding ->
@@ -226,7 +228,8 @@ fun QrLayoutContent(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(56.dp)
-                                .padding(bottom = 16.dp),
+                                .padding(bottom = 16.dp)
+                                .testTag("save_button"),
                             icon = Icons.Default.Download
                         )
                     }

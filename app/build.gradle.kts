@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.jetbrains.compose)
     alias(libs.plugins.mokkery)
+    alias(libs.plugins.roborazzi)
 }
 
 kotlin {
@@ -53,7 +54,7 @@ kotlin {
             implementation(libs.androidx.ui.tooling.preview)
             implementation(libs.androidx.ui.tooling)
         }
-        
+
         commonTest.dependencies {
             implementation(kotlin("test"))
             implementation(libs.kotlinx.coroutines.test)
@@ -66,6 +67,20 @@ kotlin {
             implementation(libs.kotlinx.coroutines.test)
             implementation(libs.turbine)
             implementation(libs.kotest.assertions)
+            implementation(libs.robolectric)
+            implementation(libs.androidx.junit)
+            implementation(libs.mockk)
+            implementation(libs.androidx.ui.test.junit4)
+            implementation(libs.roborazzi.core)
+            implementation(libs.roborazzi.compose)
+            implementation(libs.roborazzi.junit)
+        }
+
+        androidInstrumentedTest.dependencies {
+            implementation(libs.kotest.assertions)
+            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.androidx.junit)
+            implementation(libs.androidx.ui.test.junit4)
         }
 
         iosTest.dependencies {
@@ -83,12 +98,26 @@ extensions.configure<LibraryExtension>("android") {
 
     defaultConfig {
         minSdk = 23
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+            all {
+                it.systemProperty("roborazzi.test.record", "true")
+            }
+        }
+    }
+}
+
+roborazzi {
+    outputDir = file("src/androidUnitTest/snapshots/images/")
 }
 
 compose.resources {

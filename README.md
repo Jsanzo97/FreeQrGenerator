@@ -5,6 +5,7 @@
 ![iOS](https://img.shields.io/badge/iOS-Supported-grey?style=flat&logo=apple&logoColor=white&labelColor=000000)
 ![Compose Multiplatform](https://img.shields.io/badge/Compose%20Multiplatform-1.10.2-grey?style=flat&logo=jetpackcompose&logoColor=white&labelColor=blue)
 ![Testing](https://img.shields.io/badge/Testing-Kotest%20%2F%20Mokkery-grey?style=flat&logo=junit5&logoColor=white&labelColor=orange)
+![Android Testing](https://img.shields.io/badge/Android%20Robolectric%20%2B%20Roborazzi-grey?style=flat&logo=android&logoColor=white&labelColor=green)
 ![Min SDK](https://img.shields.io/badge/Min%20SDK-23-grey?style=flat&labelColor=green)
 ![License](https://img.shields.io/badge/License-MIT-grey?style=flat&labelColor=yellow)
 
@@ -33,6 +34,7 @@ iosApp      → :composeApp (shared module via framework)
 | `commonMain` | Shared UI (Compose), ViewModels, Use Cases, Navigation, and Dependency Injection. |
 | `androidMain` | Android-specific implementations (e.g., native image repositories). |
 | `iosMain` | iOS-specific implementations and entry points for the Apple app. |
+
 ---
 
 ## 🛠️ Tech Stack
@@ -67,16 +69,73 @@ The application features an animated splash screen using **Compottie**, which ma
 
 ## 🧪 Testing
 
-The project includes a robust testing suite in the common module using modern KMP libraries:
-- **Kotest Assertions**: Fluent and readable assertions.
-- **Turbine**: Testing for Kotlin Flows.
-- **Mokkery**: Mocking library specifically designed for Kotlin Multiplatform.
-- **Kotlinx Coroutines Test**: Utilities for testing coroutines.
+The project has a multi-layer testing strategy covering common, Android-specific, and iOS-specific code.
 
-To run the tests for all platforms:
+### Common Tests (`commonTest`)
+Shared tests that run on all platforms using KMP-compatible libraries:
+- **Kotest Assertions** — Fluent and readable assertions.
+- **Turbine** — Flow testing with `test { }` and `awaitItem()`.
+- **Mokkery** — Mocking library specifically designed for Kotlin Multiplatform.
+- **Kotlinx Coroutines Test** — Utilities for testing coroutines with `StandardTestDispatcher`.
+
+Covers: `MainViewModel`, Use Cases.
+
+### Android Unit Tests (`androidUnitTest`)
+Unit tests running on the JVM with Android environment simulation:
+- **Robolectric** — Simulates the Android runtime without a device, enabling tests of Android-specific classes like `ContentResolver`, permissions, and Bitmap operations.
+- **MockK** — Mocking library for JVM-based tests.
+- **Roborazzi** — Screenshot testing library. Generates PNG reference images of Compose UI states and compares them on subsequent runs to catch visual regressions.
+
+### Android Instrumentation Tests (`androidInstrumentedTest`)
+Integration tests running on a real device or emulator:
+- **Compose UI Test** — UI interaction and assertion framework for Compose screens.
+- **MockK Android** — MockK variant for instrumented tests.
+- **Koin test overrides** — ViewModel dependencies are replaced with fakes to isolate UI behavior.
+
+### iOS Tests (`iosTest`)
+Unit tests for iOS-specific implementations running on the iOS simulator:
+- **Kotlin/Native test framework** — Standard `kotlin.test` for native targets.
+- **Kotest Assertions** — Shared assertion library.
+
+Covers: `IosPermissionRepository`, `IosImageRepository`.
+
+### Screenshot Tests (Roborazzi)
+
+Screenshot tests capture visual snapshots of `QrLayoutContent` in different UI states. On first run they generate the reference images; subsequent runs compare against them.
 
 ```bash
-./gradlew :composeApp:allTests  # Run all tests (Android & iOS)
+# Generate reference images
+./gradlew :composeApp:recordRoborazziDebug
+
+# Verify no visual regressions
+./gradlew :composeApp:verifyRoborazziDebug
+```
+
+Reference images are stored in `composeApp/src/androidUnitTest/snapshots/images/` and should be committed to the repository.
+
+### Running Tests
+
+```bash
+# Run all common tests (Android & iOS)
+./gradlew :composeApp:allTests
+
+# Run Android unit tests only (includes Robolectric + Roborazzi)
+./gradlew :composeApp:testDebugUnitTest
+
+# Run Android instrumentation tests (requires emulator or device)
+./gradlew :composeApp:connectedDebugAndroidTest
+
+# Run Android UI tests in androidApp module
+./gradlew :androidApp:connectedDebugAndroidTest
+
+# Run iOS tests on simulator
+./gradlew :composeApp:iosSimulatorArm64Test
+
+# Generate screenshot references
+./gradlew :composeApp:recordRoborazziDebug
+
+# Verify screenshot regressions
+./gradlew :composeApp:verifyRoborazziDebug
 ```
 
 ---
@@ -100,6 +159,8 @@ Compose Previews are used for rapid UI component development, allowing visualiza
 
 - **Version Catalog**: Dependency management in `gradle/libs.versions.toml`.
 - **Resources**: Shared resource management (images, strings) using the Compose Resources plugin.
+
+---
 
 ## 👀 Examples
 
