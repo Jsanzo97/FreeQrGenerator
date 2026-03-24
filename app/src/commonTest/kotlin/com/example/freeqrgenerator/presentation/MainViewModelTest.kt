@@ -8,7 +8,6 @@ import com.example.freeqrgenerator.domain.usecase.RequestWritePermissionsUseCase
 import com.example.freeqrgenerator.domain.usecase.SaveImageUseCase
 import com.example.freeqrgenerator.error.FreeQrError
 import dev.mokkery.answering.returns
-import dev.mokkery.answering.throws
 import dev.mokkery.every
 import dev.mokkery.everySuspend
 import dev.mokkery.mock

@@ -6,12 +6,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -168,6 +171,7 @@ fun QrLayoutContent(
             content = { innerPadding ->
                 Column(
                     modifier = Modifier
+                        .windowInsetsPadding(WindowInsets.safeDrawing)
                         .fillMaxSize()
                         .padding(innerPadding)
                         .padding(horizontal = 16.dp)
@@ -179,7 +183,6 @@ fun QrLayoutContent(
                             }
                         },
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Bottom,
                 ) {
                     Box(
                         modifier = Modifier
@@ -216,65 +219,64 @@ fun QrLayoutContent(
                         onShowCornersSlider = { onShowCornersSlider() },
                         onImageSelected = { onImageSelected(it) },
                     )
-
-                    Spacer(modifier = Modifier.height(32.dp))
-
-                    if (isSaving) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.padding(bottom = 16.dp),
-                        )
-                    } else {
-                        CustomButton(
-                            text = stringResource(Res.string.qr_save_image),
-                            onClick = { onSaveImageClick() },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(56.dp)
-                                .padding(bottom = 16.dp)
-                                .testTag("save_button"),
-                            icon = Icons.Default.Download,
-                        )
-                    }
                 }
-
-                val colorPickerTitle = if (selectorMode == ColorSelectorMode.FOREGROUND) {
-                    stringResource(Res.string.qr_main_color)
+            },
+            bottomBar = {
+                if (isSaving) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.padding(bottom = 32.dp),
+                    )
                 } else {
-                    stringResource(Res.string.qr_background_color)
+                    CustomButton(
+                        text = stringResource(Res.string.qr_save_image),
+                        onClick = { onSaveImageClick() },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                            .padding(bottom = 32.dp)
+                            .testTag("save_button"),
+                        icon = Icons.Default.Download,
+                    )
                 }
+            }
+        )
 
-                val colorPickerInitialColor = if (selectorMode == ColorSelectorMode.FOREGROUND) {
-                    foregroundColor
-                } else {
-                    backgroundColor
-                }
+        val colorPickerTitle = if (selectorMode == ColorSelectorMode.FOREGROUND) {
+            stringResource(Res.string.qr_main_color)
+        } else {
+            stringResource(Res.string.qr_background_color)
+        }
 
-                CustomBottomSheet(
-                    visible = shouldShowColorPicker,
-                    title = colorPickerTitle,
-                    onDismiss = { onColorPickerDismiss() },
-                    content = { modifier ->
-                        ColorPickerSheetContent(
-                            modifier = modifier,
-                            initialColor = colorPickerInitialColor,
-                            onColorSelected = { onColorSelected(it) },
-                            onConfirm = { onColorPickerDismiss() },
-                        )
-                    },
+        val colorPickerInitialColor = if (selectorMode == ColorSelectorMode.FOREGROUND) {
+            foregroundColor
+        } else {
+            backgroundColor
+        }
+
+        CustomBottomSheet(
+            visible = shouldShowColorPicker,
+            title = colorPickerTitle,
+            onDismiss = { onColorPickerDismiss() },
+            content = { modifier ->
+                ColorPickerSheetContent(
+                    modifier = modifier,
+                    initialColor = colorPickerInitialColor,
+                    onColorSelected = { onColorSelected(it) },
+                    onConfirm = { onColorPickerDismiss() },
                 )
+            },
+        )
 
-                CustomBottomSheet(
-                    visible = shouldShowCornersSlider,
-                    title = stringResource(Res.string.qr_corners_radius),
-                    onDismiss = { onCornersSliderDismiss() },
-                    content = { modifier ->
-                        CustomSliderSheetContent(
-                            modifier = modifier,
-                            qrCornersRadius = qrCornersRadius,
-                            onCornersSliderDismiss = { onCornersSliderDismiss() },
-                            onCornersRadiusChanged = { onCornersRadiusChanged(it) },
-                        )
-                    },
+        CustomBottomSheet(
+            visible = shouldShowCornersSlider,
+            title = stringResource(Res.string.qr_corners_radius),
+            onDismiss = { onCornersSliderDismiss() },
+            content = { modifier ->
+                CustomSliderSheetContent(
+                    modifier = modifier,
+                    qrCornersRadius = qrCornersRadius,
+                    onCornersSliderDismiss = { onCornersSliderDismiss() },
+                    onCornersRadiusChanged = { onCornersRadiusChanged(it) },
                 )
             },
         )
@@ -308,6 +310,8 @@ private fun QrCustomization(
     onImageSelected: (ByteArray) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val localFocusManager = LocalFocusManager.current
+
     Column(
         modifier = modifier.fillMaxWidth(),
     ) {
@@ -330,7 +334,10 @@ private fun QrCustomization(
                 text = stringResource(Res.string.qr_main_color),
                 containerColor = foregroundColor,
                 borderColor = MaterialTheme.colorScheme.outline,
-                onClick = { onShowColorPicker(ColorSelectorMode.FOREGROUND) },
+                onClick = {
+                    localFocusManager.clearFocus(true)
+                    onShowColorPicker(ColorSelectorMode.FOREGROUND)
+                },
                 isCircular = true,
             )
 
@@ -338,20 +345,29 @@ private fun QrCustomization(
                 text = stringResource(Res.string.qr_background_color),
                 containerColor = backgroundColor,
                 borderColor = MaterialTheme.colorScheme.outline,
-                onClick = { onShowColorPicker(ColorSelectorMode.BACKGROUND) },
+                onClick = {
+                    localFocusManager.clearFocus(true)
+                    onShowColorPicker(ColorSelectorMode.BACKGROUND)
+                },
                 isCircular = true,
             )
 
             CustomButton(
                 text = stringResource(Res.string.qr_corners),
                 icon = Icons.Default.RoundedCorner,
-                onClick = { onShowCornersSlider() },
+                onClick = {
+                    localFocusManager.clearFocus(true)
+                    onShowCornersSlider()
+                },
                 isCircular = true,
             )
 
             CustomImagePicker(
                 text = stringResource(Res.string.qr_choose_image),
-                onImageSelected = onImageSelected,
+                onImageSelected = {
+                    localFocusManager.clearFocus(true)
+                    onImageSelected(it)
+                },
             )
         }
     }
